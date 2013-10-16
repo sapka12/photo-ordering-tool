@@ -16,7 +16,7 @@
                     <li class="active"><a href="#">${galleryName}</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="../gallerylist/<c:out value="${i.id}"/>" type="button" class="btn">
+                    <li><a href="../gallery/<c:out value="${i.id}"/>" type="button" class="btn">
                             <span class="glyphicon glyphicon-chevron-left"></span>
                         </a></li>
                 </ul>

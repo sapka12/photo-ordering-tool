@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/gallery")
+@RequestMapping("/")
 public class GalleryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GalleryController.class);
     @Autowired
     private PhotoService service;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = {"gallery/", ""}, method = RequestMethod.GET)
     public ModelAndView list() {
         LOGGER.debug("GalleryListController.list");
         ModelAndView mav = new ModelAndView("gallerylist");
@@ -30,7 +30,7 @@ public class GalleryController {
         return mav;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "gallery/{id}", method = RequestMethod.GET)
     public ModelAndView findGalleryById(@PathVariable("id") String id) {
         LOGGER.debug("findGalleryById({})", id);
 
