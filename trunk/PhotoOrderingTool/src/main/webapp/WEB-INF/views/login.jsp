@@ -11,8 +11,9 @@
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="container">
+            <div class="well">
+                <h1>Login</h1>
                 <form role="form" method="post" action="j_spring_security_check">
                     <div class="form-group">
                         <label for="loginname">Loginname</label>

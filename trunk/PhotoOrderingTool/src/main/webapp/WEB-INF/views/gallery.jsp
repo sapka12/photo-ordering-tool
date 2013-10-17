@@ -25,17 +25,20 @@
 
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-striped table-bordered table-hover">
-                    <c:forEach var="i" items="${photos}">
-                        <tr>
-                            <!--<td><c:out value="${i.id}"/></td>-->
-                            <td><c:out value="${i.title}"/></td>
-                            <td>
-                                <img src="../photo/<c:out value="${i.id}"/>" alt="<c:out value="${i.title}"/>" >
-                            </td>
-                        </tr>
-                    </c:forEach>   
-                </table>
+                <c:forEach var="photo" varStatus="status" items="${photos}">
+                    <c:if test="${status.count % 6 == 1}" >
+                        <div class="row">
+                        </c:if>
+                        <div class="col-md-2 col-sm-4">
+                            <a class="thumbnail" >
+                                <img src="../photo/<c:out value="${photo.id}"/>" alt="<c:out value="${photo.title}"/>" >
+                                <h4><c:out value="${photo.title}"/></h4>
+                            </a>
+                        </div>
+                        <c:if test="${status.count % 6 == 0}" >
+                        </div>
+                    </c:if>
+                </c:forEach>
             </div>
         </div>
     </body>

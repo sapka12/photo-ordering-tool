@@ -19,19 +19,20 @@
         </nav>
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-striped table-bordered table-hover">
-                    <c:forEach var="i" items="${list}">
-                        <tr>
-                            <!--<td><c:out value="${i.id}"/></td>-->
-                            <td><c:out value="${i.title}"/></td>
-                            <td>
-                                <a href="../gallery/<c:out value="${i.id}"/>" type="button" class="btn btn-primary">
-                                    <span class="glyphicon glyphicon-record"></span>
-                                </a>
-                            </td>
-                        </tr>
-                    </c:forEach>   
-                </table>
+                <c:forEach var="gallery" varStatus="status" items="${list}">
+                    <c:if test="${status.count % 6 == 1}" >
+                        <div class="row">
+                        </c:if>
+                        <div class="col-md-2 col-sm-4">
+                            <a href="../gallery/<c:out value="${gallery.id}"/>" class="thumbnail" >
+                                <img src="../gallery/icon/<c:out value="${gallery.id}"/>" alt="<c:out value="${gallery.title}"/>" >
+                                <h4><c:out value="${gallery.title}"/></h4>
+                            </a>
+                        </div>
+                        <c:if test="${status.count % 6 == 0}" >
+                        </div>
+                    </c:if>
+                </c:forEach>
             </div>
         </div>
     </body>

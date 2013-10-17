@@ -6,6 +6,7 @@ public class Gallery {
 
     private String id;
     private String title;
+    private String defaultPictureId;
     private List<String> photoIds;
 
     public String getId() {
@@ -30,5 +31,13 @@ public class Gallery {
 
     public void setPhotoIds(List<String> photoIds) {
         this.photoIds = photoIds;
+    }
+
+    public String getDefaultPictureId() {
+        return defaultPictureId;
+    }
+
+    public void setDefaultPictureId(String defaultPictureId) {
+        this.defaultPictureId = defaultPictureId;
     }
 }

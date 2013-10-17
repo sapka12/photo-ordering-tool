@@ -14,10 +14,10 @@ public class PhotoController {
 
     @Autowired
     private PhotoService service;
-    
+
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "image/jpg")
     public @ResponseBody
     byte[] getImage(@PathVariable("id") String id) {
-        return service.getImage(id);
+        return service.getImage(id, PhotoService.PhotoSize.SMALL);
     }
 }
