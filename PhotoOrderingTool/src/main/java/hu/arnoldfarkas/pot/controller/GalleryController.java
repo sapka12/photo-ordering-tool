@@ -11,18 +11,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/gallery")
 public class GalleryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GalleryController.class);
     @Autowired
     private PhotoService service;
 
-    @RequestMapping(value = {"gallery/", ""}, method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView list() {
         LOGGER.debug("GalleryListController.list");
         ModelAndView mav = new ModelAndView("gallerylist");
@@ -30,7 +29,7 @@ public class GalleryController {
         return mav;
     }
 
-    @RequestMapping(value = "gallery/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ModelAndView findGalleryById(@PathVariable("id") String id) {
         LOGGER.debug("findGalleryById({})", id);
 

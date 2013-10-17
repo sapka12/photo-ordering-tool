@@ -26,7 +26,7 @@
     
     <bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder" />
     
-    <context:property-placeholder location="classpath:flickr.properties" />
+    <!--<context:property-placeholder location="classpath:flickr.properties" />-->
     <context:property-placeholder location="classpath:jdbc.properties" />
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -46,7 +46,7 @@
                 <property name="database" value="MYSQL" />            
             </bean>
         </property>
-        <property name="packagesToScan" value="hu.plusone.eregister.entity" />
+        <property name="packagesToScan" value="hu.arnoldfarkas.pot.domain" />
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
