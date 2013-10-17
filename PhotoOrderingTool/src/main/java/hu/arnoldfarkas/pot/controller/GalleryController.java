@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -45,4 +46,10 @@ public class GalleryController {
         return mav;
     }
 
+    @RequestMapping(value = "/icon/{id}", method = RequestMethod.GET, produces = "image/jpg")
+    public @ResponseBody
+    byte[] getImage(@PathVariable("id") String id) {
+        String pictureId = service.findOne(id).getDefaultPictureId();
+        return service.getImage(pictureId, PhotoService.PhotoSize.SMALL_SQ);
+    }
 }

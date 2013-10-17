@@ -13,6 +13,7 @@ import com.flickr4java.flickr.photosets.Photosets;
 import hu.arnoldfarkas.pot.domain.Gallery;
 import hu.arnoldfarkas.pot.domain.Photo;
 import hu.arnoldfarkas.pot.service.PhotoService;
+import static hu.arnoldfarkas.pot.service.PhotoService.PhotoSize.ORGIGINAL;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,15 +71,7 @@ public class FlickrPhotoService implements PhotoService {
 
     @Override
     public byte[] getImage(String photoId) {
-        getAuth();
-        try {
-            PhotosInterface pi = flickrApi.getPhotosInterface();
-            com.flickr4java.flickr.photos.Photo photo = pi.getPhoto(photoId);
-            InputStream imageInputStream = pi.getImageAsStream(photo, Size.THUMB);
-            return IOUtils.toByteArray(imageInputStream);
-        } catch (Throwable ex) {
-            throw new RuntimeException(ex);
-        }
+        return getImage(photoId, PhotoSize.SMALL_SQ);
     }
 
     private String getUserId() {
@@ -108,6 +101,7 @@ public class FlickrPhotoService implements PhotoService {
         Gallery gallery = new Gallery();
         gallery.setId(photoset.getId());
         gallery.setTitle(photoset.getTitle());
+        gallery.setDefaultPictureId(photoset.getPrimaryPhoto().getId());
 
         List<String> photos = new ArrayList<String>();
         for (com.flickr4java.flickr.photos.Photo photo : findAllWithException(photoset.getId())) {
@@ -136,6 +130,31 @@ public class FlickrPhotoService implements PhotoService {
             return convert(photoset);
         } catch (FlickrException ex) {
             throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public byte[] getImage(String photoId, PhotoSize size) {
+        getAuth();
+        try {
+            PhotosInterface pi = flickrApi.getPhotosInterface();
+            com.flickr4java.flickr.photos.Photo photo = pi.getPhoto(photoId);
+            InputStream imageInputStream = pi.getImageAsStream(photo, convertSize(size));
+            return IOUtils.toByteArray(imageInputStream);
+        } catch (Throwable ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private int convertSize(PhotoSize size) {
+        switch (size) {
+            case ORGIGINAL:
+                return Size.ORIGINAL;
+            case SMALL:
+                return Size.THUMB;
+            case SMALL_SQ:
+            default:
+                return Size.SQUARE;
         }
     }
 }
