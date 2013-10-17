@@ -5,6 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sets</title>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
@@ -23,7 +24,7 @@
                     <c:if test="${status.count % 6 == 1}" >
                         <div class="row">
                         </c:if>
-                        <div class="col-md-2 col-sm-4">
+                        <div class="col-md-2 col-sm-4 text-center">
                             <a href="../gallery/<c:out value="${gallery.id}"/>" class="thumbnail" >
                                 <img src="../gallery/icon/<c:out value="${gallery.id}"/>" alt="<c:out value="${gallery.title}"/>" >
                                 <h4><c:out value="${gallery.title}"/></h4>

@@ -17,5 +17,6 @@ public interface PhotoService {
 
     List<Photo> findAll(String galleryId);
     byte[] getImage(String photoId);
-    byte[] getImage(String photoId, PhotoSize size);
+    byte[] getImage(String photoId, PhotoSize size);    
+    
 }

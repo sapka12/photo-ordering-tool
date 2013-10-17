@@ -34,7 +34,7 @@ public class JpaUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(username);
         }
         LOGGER.debug("user found: {}", user);
-        return new org.springframework.security.core.userdetails.User(username, username, getAuthorities(user));
+        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), getAuthorities(user));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {

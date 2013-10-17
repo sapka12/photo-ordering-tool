@@ -1,5 +1,6 @@
 package hu.arnoldfarkas.pot.controller;
 
+import hu.arnoldfarkas.pot.service.OrderService;
 import hu.arnoldfarkas.pot.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,10 +15,21 @@ public class PhotoController {
 
     @Autowired
     private PhotoService service;
+    @Autowired
+    private OrderService orderService;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "image/jpg")
     public @ResponseBody
     byte[] getImage(@PathVariable("id") String id) {
         return service.getImage(id, PhotoService.PhotoSize.SMALL);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public @ResponseBody int increasePhotoInOrder(@PathVariable("id") String id) {
+        return orderService.increasePhotoCount(getActualOrderId(), id);
+    }
+    
+    private long getActualOrderId() {
+        return 0;
     }
 }
