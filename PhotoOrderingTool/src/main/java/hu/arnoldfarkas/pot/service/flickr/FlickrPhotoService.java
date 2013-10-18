@@ -21,27 +21,27 @@ import org.apache.commons.io.IOUtils;
 import org.scribe.model.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FlickrPhotoService implements PhotoService {
+public class FlickrPhotoService implements PhotoService, InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FlickrPhotoService.class);
     private static final Transport TRANSPORT = new REST();
-//    @Value("${flickr.apisecret}")
-    private String apiSecret = "d0fccf78386ca7ed";
-//    @Value("${flickr.apikey}")
-    private String apiKey = "17b52840f55eba355a4c3d20c128430d";
-//    @Value("${flickr.requesttoken.secret}")
-    private String requesttokenSecret = "8673eaf899068027";
-//    @Value("${flickr.requesttoken.token}")
-    private String requesttokenToken = "72157636348827875-e0a58fc0d7500692";
+    @Value("#{flickrProperties['flickr.apisecret']}")
+    private String apiSecret;
+    @Value("#{flickrProperties['flickr.apikey']}")
+    private String apiKey;
+    @Value("#{flickrProperties['flickr.requesttoken.secret']}")
+    private String requesttokenSecret;
+    @Value("#{flickrProperties['flickr.requesttoken.token']}")
+    private String requesttokenToken;
     private Flickr flickrApi;
     private Token requestToken;
 
     public FlickrPhotoService() {
-        flickrApi = new Flickr(apiKey, apiSecret, TRANSPORT);
-        requestToken = new Token(requesttokenToken, requesttokenSecret);
     }
 
     @Override
@@ -124,7 +124,7 @@ public class FlickrPhotoService implements PhotoService {
     }
 
     @Override
-    public Gallery findOne(String id) {
+    public Gallery findGallery(String id) {
         try {
             Photoset photoset = flickrApi.getPhotosetsInterface().getInfo(id);
             return convert(photoset);
@@ -155,6 +155,25 @@ public class FlickrPhotoService implements PhotoService {
             case SMALL_SQ:
             default:
                 return Size.SQUARE;
+        }
+    }
+
+    @Override
+    public Photo findPhoto(String id) {
+        return convert(findFlickrPhoto(id));
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        flickrApi = new Flickr(apiKey, apiSecret, TRANSPORT);
+        requestToken = new Token(requesttokenToken, requesttokenSecret);
+    }
+
+    private com.flickr4java.flickr.photos.Photo findFlickrPhoto(String id) {
+        try {
+            return flickrApi.getPhotosInterface().getPhoto(id);
+        } catch (FlickrException e) {
+            throw new RuntimeException(e);
         }
     }
 }

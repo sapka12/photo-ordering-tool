@@ -47,7 +47,11 @@
             <artifactId>spring-security-config</artifactId>
             <version>${spring.sec}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>${spring.sec}</version>
+        </dependency>
 
         <!--DATABASE-->
         <dependency>
@@ -74,8 +78,15 @@
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
             <version>1.1</version>
-        </dependency>      
-                                
+        </dependency>
+              
+        <!-- Jackson JSON Mapper -->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.12</version>
+        </dependency>            
+        
         <dependency>
             <groupId>com.flickr4java</groupId>
             <artifactId>flickr</artifactId>

@@ -25,17 +25,20 @@
         <intercept-url pattern="/gallery/*" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/user" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/order/all" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/order/allactual" access="hasRole('ROLE_ADMIN')"/>
 		
         <form-login 
             login-page="/login" 
             authentication-failure-url="/login?/failure"
             default-target-url="/gallery/"
+            always-use-default-target="true"            
         />
 		
         <access-denied-handler error-page="/denied"/>
 		
         <logout invalidate-session="true" 
-                logout-success-url="/logout/success" 
+                logout-success-url="/login" 
                 logout-url="/logout"/>
     </http>
 	
