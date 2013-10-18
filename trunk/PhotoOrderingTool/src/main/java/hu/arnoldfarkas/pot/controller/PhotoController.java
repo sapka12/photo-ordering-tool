@@ -2,6 +2,7 @@ package hu.arnoldfarkas.pot.controller;
 
 import hu.arnoldfarkas.pot.service.OrderService;
 import hu.arnoldfarkas.pot.service.PhotoService;
+import hu.arnoldfarkas.pot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,8 @@ public class PhotoController {
     private PhotoService service;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "image/jpg")
     public @ResponseBody
@@ -24,12 +27,23 @@ public class PhotoController {
         return service.getImage(id, PhotoService.PhotoSize.SMALL);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    public @ResponseBody int increasePhotoInOrder(@PathVariable("id") String id) {
-        return orderService.increasePhotoCount(getActualOrderId(), id);
+    @RequestMapping(value = "/inc/{id}", method = RequestMethod.POST)
+    public @ResponseBody
+    int increasePhotoInOrder(@PathVariable("id") String id) {
+        return inc(id, true);
     }
-    
-    private long getActualOrderId() {
-        return 0;
+
+    @RequestMapping(value = "/dec/{id}", method = RequestMethod.POST)
+    public @ResponseBody
+    int decreasePhotoInOrder(@PathVariable("id") String id) {
+        return inc(id, false);
+    }
+
+    private int inc(String photoId, boolean increasing) {
+        return orderService.increasePhotoCount(getLoggedInUserId(), photoId, increasing ? 1 : -1);
+    }
+
+    private long getLoggedInUserId() {
+        return userService.findLoggedInUser().getId();
     }
 }

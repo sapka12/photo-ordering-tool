@@ -12,7 +12,8 @@ public interface PhotoService {
         SMALL_SQ
     }
     
-    Gallery findOne(String id);
+    Gallery findGallery(String id);
+    Photo findPhoto(String id);
     List<Gallery> findAll();
 
     List<Photo> findAll(String galleryId);

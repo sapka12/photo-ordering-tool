@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,12 +15,25 @@
         <nav class="navbar navbar-default" role="navigation">
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">${galleryName}</a></li>
+                    <li><a href="${pageContext.request.contextPath}/gallery/">Galleries</a></li>
+                    <li<c:if test="${galleryName == null}"> class="active"</c:if>><a href="${pageContext.request.contextPath}/order/">Order</a></li>
+                        <c:if test="${galleryName != null}">
+                        <li class="active"><a href="#">${galleryName}</a></li>
+                        </c:if>
+
+                    <sec:authorize access="hasAnyRole('ROLE_ADMIN')">
+                        <li><a href="${pageContext.request.contextPath}/order/allactual">Actual Orders</a></li>        
+                        <li><a href="${pageContext.request.contextPath}/order/all">All Orders</a></li>        
+                        </sec:authorize>
+
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="../gallery/<c:out value="${i.id}"/>" type="button" class="btn">
-                            <span class="glyphicon glyphicon-chevron-left"></span>
-                        </a></li>
+                    <li><a>${username}</a></li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/logout<c:out value="${i.id}"/>" type="button" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-log-out"></span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -34,15 +48,15 @@
 
                             <ul class="list-group">
                                 <li class="list-group-item">
-                                    <a class="thumbnail" >
-                                        <img src="../photo/<c:out value="${photo.photo.id}"/>" alt="<c:out value="${photo.photo.title}"/>" >
+                                    <a class="thumbnail" style="min-height: 110px;">
+                                        <img src="${pageContext.request.contextPath}/photo/<c:out value="${photo.photo.id}"/>" alt="<c:out value="${photo.photo.title}"/>" >
                                     </a>
                                 </li>
                                 <li class="list-group-item text-center">
                                     <h4><c:out value="${photo.photo.title}"/></h4>
                                 </li>
                                 <li class="list-group-item">
-                                    <input type="text" class="form-control item-counter" photo-id="${photo.photo.id}" value="0">        
+                                    <input type="text" class="form-control item-counter" photo-id="${photo.photo.id}" value="${photo.counter}" disabled>        
                                 </li>
                                 <li class="list-group-item text-center">
                                     <div class="btn-group">
@@ -60,9 +74,44 @@
         </div>
         <script>
             $(document).ready(function() {
-                var itemCounters = $("li.list-group-item .item-counter");
-                itemCounters.each(function () {
-                   console.log($(this).attr("photo-id")) ;
+                var incUrlBase = "${pageContext.request.contextPath}/photo/inc/";
+                var decUrlBase = "${pageContext.request.contextPath}/photo/dec/";
+                var listGroups = $(".list-group");
+
+                var setEnableButtons = function(enable) {
+                    if (enable) {
+                        $(".glyphicon-minus").parent().removeAttr('disabled');
+                        $(".glyphicon-plus").parent().removeAttr('disabled');
+                    } else {
+                        $(".glyphicon-minus").parent().attr('disabled', 'disabled');
+                        $(".glyphicon-plus").parent().attr('disabled', 'disabled');
+                    }
+                };
+
+                listGroups.each(function() {
+
+                    var itemCounter = $(".item-counter:first", this);
+                    var showChangedCounter = function(changedCounter) {
+                        itemCounter.val(changedCounter);
+                        setEnableButtons(true);
+                    };
+
+                    var count = itemCounter.val();
+                    var photoId = itemCounter.attr("photo-id");
+                    console.log("photo[" + photoId + "]: " + count);
+
+                    var minusButton = $(".glyphicon-minus:first", this).parent();
+                    var plusButton = $(".glyphicon-plus:first", this).parent();
+
+                    plusButton.click(function() {
+                        $.post(incUrlBase + photoId, showChangedCounter);
+                    });
+
+                    minusButton.click(function() {
+                        setEnableButtons(false);
+                        $.post(decUrlBase + photoId, showChangedCounter);
+                    });
+
                 });
             });
         </script>
