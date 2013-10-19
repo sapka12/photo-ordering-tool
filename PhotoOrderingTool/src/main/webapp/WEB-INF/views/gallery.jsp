@@ -61,7 +61,7 @@
                 var mediumPhotoUrlBase = "${pageContext.request.contextPath}/photo/medium/";
                 var incUrlBase = "${pageContext.request.contextPath}/photo/inc/";
                 var decUrlBase = "${pageContext.request.contextPath}/photo/dec/";
-                var listGroups = $(".list-group");
+
                 var setEnableButtons = function(enable) {
                     if (enable) {
                         $(".glyphicon-minus").parent().removeAttr('disabled');
@@ -71,11 +71,13 @@
                         $(".glyphicon-plus").parent().attr('disabled', 'disabled');
                     }
                 };
-                var changeImage = function(photoId) {
+                var changeImage = function(photoId, photoName) {
                     var photoUrl = mediumPhotoUrlBase + photoId;
-                    $(".modal-body").html('<a class="thumbnail" ><img src="' + photoUrl + '"></a>')
+                    $(".modal-body").html('<a class="thumbnail" ><img src="' + photoUrl + '"></a>');
+                    $(".modal-title").text(photoName);
                 };
 
+                var listGroups = $(".list-group");
                 listGroups.each(function() {
                     var itemCounter = $(".item-counter:first", this);
                     var showChangedCounter = function(changedCounter) {
@@ -84,6 +86,7 @@
                     };
                     var count = itemCounter.val();
                     var photoId = itemCounter.attr("photo-id");
+                    var photoName = $("h4:first", this).text();
                     console.log("photo[" + photoId + "]: " + count);
                     var minusButton = $(".glyphicon-minus:first", this).parent();
                     var plusButton = $(".glyphicon-plus:first", this).parent();
@@ -96,8 +99,7 @@
                     });
                     var modalButton = $(".thumbnail:first", this);
                     modalButton.click(function() {
-                        changeImage(photoId);
-                        //$.post(incUrlBase + photoId, changeImage(photoId));
+                        changeImage(photoId, photoName);
                     });
                 });
             });
