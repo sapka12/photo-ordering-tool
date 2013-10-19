@@ -26,6 +26,12 @@ public class PhotoController {
     byte[] getImage(@PathVariable("id") String id) {
         return service.getImage(id, PhotoService.PhotoSize.SMALL);
     }
+    
+    @RequestMapping(value = "/medium/{id}", method = RequestMethod.GET, produces = "image/jpg")
+    public @ResponseBody
+    byte[] getMediumImage(@PathVariable("id") String id) {
+        return service.getImage(id, PhotoService.PhotoSize.MEDIUM);
+    }
 
     @RequestMapping(value = "/inc/{id}", method = RequestMethod.POST)
     public @ResponseBody
