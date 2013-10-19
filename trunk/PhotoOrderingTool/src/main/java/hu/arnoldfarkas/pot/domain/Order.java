@@ -8,8 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 
-@Entity(name = "orders")
+@Entity(name = "pot_orders")
 public class Order implements Serializable {
 
     @Id
@@ -18,7 +19,7 @@ public class Order implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Calendar closingDate;
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public User getUser() {
@@ -43,5 +44,10 @@ public class Order implements Serializable {
 
     public void setClosingDate(Calendar closingDate) {
         this.closingDate = closingDate;
+    }
+
+    @Transient
+    public boolean isActive() {
+        return getClosingDate() == null;
     }
 }

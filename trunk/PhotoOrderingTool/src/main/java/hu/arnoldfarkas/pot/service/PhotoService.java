@@ -8,6 +8,8 @@ public interface PhotoService {
 
     public enum PhotoSize {
         ORGIGINAL,
+        LARGE,
+        MEDIUM,
         SMALL,
         SMALL_SQ
     }

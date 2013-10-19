@@ -3,40 +3,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <head>        
         <title>${galleryName}</title>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <%@include file='./common/head.jsp'%>
     </head>
     <body>
-        <nav class="navbar navbar-default" role="navigation">
-            <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="${pageContext.request.contextPath}/gallery/">Galleries</a></li>
-                    <li<c:if test="${galleryName == null}"> class="active"</c:if>><a href="${pageContext.request.contextPath}/order/">Order</a></li>
-                        <c:if test="${galleryName != null}">
-                        <li class="active"><a href="#">${galleryName}</a></li>
-                        </c:if>
-
-                    <sec:authorize access="hasAnyRole('ROLE_ADMIN')">
-                        <li><a href="${pageContext.request.contextPath}/order/allactual">Actual Orders</a></li>        
-                        <li><a href="${pageContext.request.contextPath}/order/all">All Orders</a></li>        
-                        </sec:authorize>
-
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a>${username}</a></li>
-                    <li>
-                        <a href="${pageContext.request.contextPath}/logout<c:out value="${i.id}"/>" type="button" class="btn btn-danger">
-                            <span class="glyphicon glyphicon-log-out"></span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        <%@include file='./common/navbar.jsp'%>
 
         <div class="panel panel-default">
             <div class="panel-body">
