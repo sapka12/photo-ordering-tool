@@ -20,7 +20,7 @@
 
                             <ul class="list-group">
                                 <li class="list-group-item">
-                                    <a class="thumbnail" style="min-height: 110px;">
+                                    <a class="thumbnail" data-toggle="modal" href="#myModal" style="min-height: 110px;">
                                         <img src="${pageContext.request.contextPath}/photo/<c:out value="${photo.photo.id}"/>" alt="<c:out value="${photo.photo.title}"/>" >
                                     </a>
                                 </li>
@@ -44,12 +44,24 @@
                 </c:forEach>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Modal title</h4>
+                    </div>
+                    <div class="modal-body" />
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
         <script>
             $(document).ready(function() {
+                var mediumPhotoUrlBase = "${pageContext.request.contextPath}/photo/medium/";
                 var incUrlBase = "${pageContext.request.contextPath}/photo/inc/";
                 var decUrlBase = "${pageContext.request.contextPath}/photo/dec/";
                 var listGroups = $(".list-group");
-
                 var setEnableButtons = function(enable) {
                     if (enable) {
                         $(".glyphicon-minus").parent().removeAttr('disabled');
@@ -59,31 +71,34 @@
                         $(".glyphicon-plus").parent().attr('disabled', 'disabled');
                     }
                 };
+                var changeImage = function(photoId) {
+                    var photoUrl = mediumPhotoUrlBase + photoId;
+                    $(".modal-body").html('<a class="thumbnail" ><img src="' + photoUrl + '"></a>')
+                };
 
                 listGroups.each(function() {
-
                     var itemCounter = $(".item-counter:first", this);
                     var showChangedCounter = function(changedCounter) {
                         itemCounter.val(changedCounter);
                         setEnableButtons(true);
                     };
-
                     var count = itemCounter.val();
                     var photoId = itemCounter.attr("photo-id");
                     console.log("photo[" + photoId + "]: " + count);
-
                     var minusButton = $(".glyphicon-minus:first", this).parent();
                     var plusButton = $(".glyphicon-plus:first", this).parent();
-
                     plusButton.click(function() {
                         $.post(incUrlBase + photoId, showChangedCounter);
                     });
-
                     minusButton.click(function() {
                         setEnableButtons(false);
                         $.post(decUrlBase + photoId, showChangedCounter);
                     });
-
+                    var modalButton = $(".thumbnail:first", this);
+                    modalButton.click(function() {
+                        changeImage(photoId);
+                        //$.post(incUrlBase + photoId, changeImage(photoId));
+                    });
                 });
             });
         </script>
