@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity(name = "users")
+@Entity(name = "pot_users")
 public class User implements Serializable {
 
     @Id
@@ -15,7 +15,7 @@ public class User implements Serializable {
     private Long id;
     @Column(name = "password")
     private String password;
-    @Column(name = "name", unique = true)
+    @Column(name = "name", unique = true, nullable = false)
     private String username;
     @Column(name = "admin_role")
     private boolean admin = false;

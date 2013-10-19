@@ -2,6 +2,7 @@ package hu.arnoldfarkas.pot.controller;
 
 import hu.arnoldfarkas.pot.controller.form.FormPhoto;
 import hu.arnoldfarkas.pot.domain.Gallery;
+import hu.arnoldfarkas.pot.domain.Item;
 import hu.arnoldfarkas.pot.domain.Photo;
 import hu.arnoldfarkas.pot.domain.User;
 import hu.arnoldfarkas.pot.service.OrderService;
@@ -63,26 +64,33 @@ public class GalleryController {
     }
 
     private List<FormPhoto> findAll(String galleryId) {
+        final List<Item> ownedItems = orderService.findAllByUser(getLoggedInUser().getId());
         List<Photo> photos = photoService.findAll(galleryId);
         List<FormPhoto> formPhotos = new ArrayList<FormPhoto>();
         for (Photo photo : photos) {
-            formPhotos.add(createformPhoto(photo));
+            formPhotos.add(createformPhoto(photo, ownedItems));
         }
         return formPhotos;
     }
 
-    private FormPhoto createformPhoto(Photo photo) {
+    private FormPhoto createformPhoto(Photo photo, List<Item> ownedItems) {
         FormPhoto fp = new FormPhoto();
         fp.setPhoto(photo);
-        fp.setCounter(getCounter(photo.getId()));
+        fp.setCounter(getCounter(photo.getId(), ownedItems));
         return fp;
+    }
+
+    private int getCounter(String photoId, List<Item> ownedItems) {
+        int counter = 0;
+        for (Item item : ownedItems) {
+            if (item.getPhotoId().equals(photoId)) {
+                counter += item.getQuantity();
+            }
+        }
+        return counter;
     }
 
     private User getLoggedInUser() {
         return userService.findLoggedInUser();
-    }
-
-    private int getCounter(String photoId) {
-        return orderService.countPhotos(getLoggedInUser().getId(), photoId);
     }
 }

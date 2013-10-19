@@ -1,22 +1,26 @@
 package hu.arnoldfarkas.pot.domain;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-@Entity(name = "items")
+@Entity(name = "pot_items")
 public class Item implements Serializable {
 
     @Id
     @GeneratedValue
+    @Column(name = "id")
     private Long id;
+    @Column(name = "flickr_photo_id", nullable = false)
     private String photoId;
+    @Column(name = "quantity")
     private int quantity;
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     public Long getId() {

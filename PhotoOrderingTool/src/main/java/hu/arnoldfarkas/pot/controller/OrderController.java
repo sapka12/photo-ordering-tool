@@ -60,6 +60,7 @@ public class OrderController {
         ModelAndView mav = new ModelAndView("gallery");
         User user = getLoggedInUser();
         mav.addObject("username", user.getUsername());
+        mav.addObject("galleryName", "Order");
         mav.addObject("photos", findAll(user.getId()));
         return mav;
     }

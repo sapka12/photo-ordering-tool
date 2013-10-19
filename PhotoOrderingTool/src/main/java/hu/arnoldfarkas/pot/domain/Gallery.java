@@ -7,7 +7,6 @@ public class Gallery {
     private String id;
     private String title;
     private String defaultPictureId;
-    private List<String> photoIds;
 
     public String getId() {
         return id;
@@ -23,14 +22,6 @@ public class Gallery {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public List<String> getPhotoIds() {
-        return photoIds;
-    }
-
-    public void setPhotoIds(List<String> photoIds) {
-        this.photoIds = photoIds;
     }
 
     public String getDefaultPictureId() {

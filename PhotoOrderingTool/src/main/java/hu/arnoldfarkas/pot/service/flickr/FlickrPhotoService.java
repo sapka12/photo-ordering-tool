@@ -1,12 +1,5 @@
 package hu.arnoldfarkas.pot.service.flickr;
 
-import com.flickr4java.flickr.Flickr;
-import com.flickr4java.flickr.FlickrException;
-import com.flickr4java.flickr.REST;
-import com.flickr4java.flickr.Transport;
-import com.flickr4java.flickr.auth.Auth;
-import com.flickr4java.flickr.photos.PhotoList;
-import com.flickr4java.flickr.photos.PhotosInterface;
 import com.flickr4java.flickr.photos.Size;
 import com.flickr4java.flickr.photosets.Photoset;
 import com.flickr4java.flickr.photosets.Photosets;
@@ -14,81 +7,31 @@ import hu.arnoldfarkas.pot.domain.Gallery;
 import hu.arnoldfarkas.pot.domain.Photo;
 import hu.arnoldfarkas.pot.service.PhotoService;
 import static hu.arnoldfarkas.pot.service.PhotoService.PhotoSize.ORGIGINAL;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
-import org.scribe.model.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FlickrPhotoService implements PhotoService, InitializingBean {
-
+public class FlickrPhotoService implements PhotoService {
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(FlickrPhotoService.class);
-    private static final Transport TRANSPORT = new REST();
-    @Value("#{flickrProperties['flickr.apisecret']}")
-    private String apiSecret;
-    @Value("#{flickrProperties['flickr.apikey']}")
-    private String apiKey;
-    @Value("#{flickrProperties['flickr.requesttoken.secret']}")
-    private String requesttokenSecret;
-    @Value("#{flickrProperties['flickr.requesttoken.token']}")
-    private String requesttokenToken;
-    private Flickr flickrApi;
-    private Token requestToken;
-
+    @Autowired
+    private FlickrApi flickrApi;
+    
     public FlickrPhotoService() {
     }
-
+    
     @Override
     public List<Gallery> findAll() {
         LOGGER.debug("FindAll");
-        getAuth();
-        try {
-            return findAllWithException();
-        } catch (FlickrException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @Override
-    public List<Photo> findAll(String galleryId) {
-        getAuth();
-        try {
-            List<Photo> photos = new ArrayList<Photo>();
-            for (com.flickr4java.flickr.photos.Photo flickrPhoto : findAllWithException(galleryId)) {
-                photos.add(convert(flickrPhoto));
-            }
-            return photos;
-        } catch (FlickrException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @Override
-    public byte[] getImage(String photoId) {
-        return getImage(photoId, PhotoSize.SMALL_SQ);
-    }
-
-    private String getUserId() {
-        return getAuth().getUser().getId();
-    }
-
-    private Auth getAuth() {
-        try {
-            return flickrApi.getAuthInterface().checkToken(requestToken);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private List<Gallery> findAllWithException() throws FlickrException {
-        Photosets photosets = flickrApi.getPhotosetsInterface().getList(getUserId());
-
+        Photosets photosets = flickrApi.getPhotosets();
+        
         List<Gallery> list = new ArrayList<Gallery>();
         for (Photoset photoset : photosets.getPhotosets()) {
             list.add(convert(photoset));
@@ -96,84 +39,74 @@ public class FlickrPhotoService implements PhotoService, InitializingBean {
         LOGGER.debug("findAll: {}", list);
         return list;
     }
-
-    private Gallery convert(Photoset photoset) throws FlickrException {
+    
+    @Override
+    public List<Photo> findAll(String galleryId) {
+        List<Photo> photos = new ArrayList<Photo>();
+        for (com.flickr4java.flickr.photos.Photo flickrPhoto : flickrApi.findAllByPhotoset(galleryId)) {
+            photos.add(convert(flickrPhoto));
+        }
+        return photos;
+    }
+    
+    @Override
+    public byte[] getImage(String photoId) {
+        return getImage(photoId, PhotoSize.SMALL_SQ);
+    }
+    
+    private Gallery convert(Photoset photoset) {
         Gallery gallery = new Gallery();
         gallery.setId(photoset.getId());
         gallery.setTitle(photoset.getTitle());
         gallery.setDefaultPictureId(photoset.getPrimaryPhoto().getId());
-
-        List<String> photos = new ArrayList<String>();
-        for (com.flickr4java.flickr.photos.Photo photo : findAllWithException(photoset.getId())) {
-            photos.add(photo.getId());
-        }
-        gallery.setPhotoIds(photos);
         return gallery;
     }
-
-    private Iterable<com.flickr4java.flickr.photos.Photo> findAllWithException(String photosetId) throws FlickrException {
-        PhotoList list = flickrApi.getPhotosetsInterface().getPhotos(photosetId, Integer.MAX_VALUE, 0);
-        return list.subList(0, list.size());
-    }
-
+    
     private Photo convert(com.flickr4java.flickr.photos.Photo flickrPhoto) {
         Photo photo = new Photo();
         photo.setId(flickrPhoto.getId());
         photo.setTitle(flickrPhoto.getTitle());
         return photo;
     }
-
+    
     @Override
     public Gallery findGallery(String id) {
-        try {
-            Photoset photoset = flickrApi.getPhotosetsInterface().getInfo(id);
-            return convert(photoset);
-        } catch (FlickrException ex) {
-            throw new RuntimeException(ex);
-        }
+        Photoset photoset = flickrApi.findOnePhotoset(id);
+        return convert(photoset);
     }
-
+    
+    public byte[] getImageWithException(String photoId, PhotoSize size) throws IOException {
+        InputStream imageInputStream = flickrApi.getImage(photoId, convertSize(size));
+        return IOUtils.toByteArray(imageInputStream);
+    }
+    
     @Override
     public byte[] getImage(String photoId, PhotoSize size) {
-        getAuth();
         try {
-            PhotosInterface pi = flickrApi.getPhotosInterface();
-            com.flickr4java.flickr.photos.Photo photo = pi.getPhoto(photoId);
-            InputStream imageInputStream = pi.getImageAsStream(photo, convertSize(size));
-            return IOUtils.toByteArray(imageInputStream);
-        } catch (Throwable ex) {
+            return getImageWithException(photoId, size);
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }
-
+    
     private int convertSize(PhotoSize size) {
         switch (size) {
             case ORGIGINAL:
                 return Size.ORIGINAL;
             case SMALL:
                 return Size.THUMB;
+            case MEDIUM:
+                return Size.MEDIUM;
+            case LARGE:
+                return Size.LARGE;
             case SMALL_SQ:
             default:
                 return Size.SQUARE;
         }
     }
-
+    
     @Override
     public Photo findPhoto(String id) {
-        return convert(findFlickrPhoto(id));
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        flickrApi = new Flickr(apiKey, apiSecret, TRANSPORT);
-        requestToken = new Token(requesttokenToken, requesttokenSecret);
-    }
-
-    private com.flickr4java.flickr.photos.Photo findFlickrPhoto(String id) {
-        try {
-            return flickrApi.getPhotosInterface().getPhoto(id);
-        } catch (FlickrException e) {
-            throw new RuntimeException(e);
-        }
+        return convert(flickrApi.findOnePhoto(id));
     }
 }
