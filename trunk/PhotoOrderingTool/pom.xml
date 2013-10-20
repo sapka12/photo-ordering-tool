@@ -133,7 +133,7 @@
                         </component>                          
                     </components>
                     <componentProperties>
-                        <drop>true</drop>
+                        <drop>false</drop>
                         <create>true</create>
                         <export>false</export>
                         <format>true</format>                    

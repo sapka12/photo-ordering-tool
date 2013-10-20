@@ -1,11 +1,14 @@
 package hu.arnoldfarkas.pot.controller.form;
 
 import hu.arnoldfarkas.pot.domain.Photo;
+import hu.arnoldfarkas.pot.domain.PhotoTypeCounter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FormPhoto {
 
     private Photo photo;
-    private int counter;
+    private List<PhotoTypeCounter> counters = new ArrayList<PhotoTypeCounter>();
 
     public Photo getPhoto() {
         return photo;
@@ -15,12 +18,18 @@ public class FormPhoto {
         this.photo = photo;
     }
 
-    public int getCounter() {
-        return counter;
+    public List<PhotoTypeCounter> getCounters() {
+        return counters;
     }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
+    public void setCounters(List<PhotoTypeCounter> counters) {
+        this.counters = counters;
     }
+
+    @Override
+    public String toString() {
+        return "FormPhoto{" + "photo=" + photo + ", counters=" + counters + '}';
+    }
+    
     
 }

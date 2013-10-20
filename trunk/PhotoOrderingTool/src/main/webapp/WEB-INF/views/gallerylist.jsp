@@ -12,10 +12,10 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <c:forEach var="gallery" varStatus="status" items="${list}">
-                <c:if test="${status.count % 6 == 1}" >
+                <c:if test="${status.count % 4 == 1}" >
                     <div class="row">
                     </c:if>
-                    <div class="col-md-2 col-sm-4">
+                    <div class="col-md-3 col-sm-6">
                         <ul class="list-group">
                             <li class="list-group-item">
                                 <a href="${pageContext.request.contextPath}/gallery/<c:out value="${gallery.id}"/>" class="thumbnail" >
@@ -27,7 +27,7 @@
                             </li>
                         </ul>
                     </div>
-                    <c:if test="${status.count % 6 == 0}" >
+                    <c:if test="${status.count % 4 == 0}" >
                     </div>
                 </c:if>
             </c:forEach>

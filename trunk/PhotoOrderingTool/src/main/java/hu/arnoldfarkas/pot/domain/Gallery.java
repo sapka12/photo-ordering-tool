@@ -1,7 +1,5 @@
 package hu.arnoldfarkas.pot.domain;
 
-import java.util.List;
-
 public class Gallery {
 
     private String id;
