@@ -138,7 +138,9 @@ public class JpaOrderService implements OrderService {
 
     @Override
     public List<PhotoTypeCounter> findAllPhotoTypeCounterByItem(long id) {
-        return photoTypeCounterRepository.findAll(typeSpecBuilder.buildByItem(id));
+        List<PhotoTypeCounter>  counters = photoTypeCounterRepository.findAll(typeSpecBuilder.buildByItem(id));
+        validate(counters);
+        return counters;
     }
 
     private PhotoTypeCounter getOrCreateTypeCounter(Item item, PhotoType photoType) {
@@ -205,5 +207,22 @@ public class JpaOrderService implements OrderService {
         PhotoTypeCounter ptc = new PhotoTypeCounter();
         ptc.setType(type);
         return ptc;
+    }
+
+    @Override
+    public List<FormPhoto> findAllActualOrderByUser(long userId) {
+        List<FormPhoto> formPhotos = new ArrayList<FormPhoto>();
+        for (Item item : findAllByUser(userId)) {
+            formPhotos.add(convert(item));
+        }
+        return formPhotos;
+
+    }
+
+    private FormPhoto convert(Item item) {
+        FormPhoto p = new FormPhoto();
+        p.setPhoto(photoService.findPhoto(item.getPhotoId()));
+        p.setCounters(findAllPhotoTypeCounterByItem(item.getId()));
+        return p;
     }
 }

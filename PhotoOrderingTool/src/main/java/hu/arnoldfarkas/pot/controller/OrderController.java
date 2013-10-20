@@ -2,7 +2,6 @@ package hu.arnoldfarkas.pot.controller;
 
 import hu.arnoldfarkas.pot.controller.form.FormOrder;
 import hu.arnoldfarkas.pot.controller.form.FormPhoto;
-import hu.arnoldfarkas.pot.domain.Item;
 import hu.arnoldfarkas.pot.domain.User;
 import hu.arnoldfarkas.pot.service.OrderService;
 import hu.arnoldfarkas.pot.service.PhotoService;
@@ -66,21 +65,10 @@ public class OrderController {
     }
 
     private List<FormPhoto> findAll(long userId) {
-        List<FormPhoto> formPhotos = new ArrayList<FormPhoto>();
-        for (Item item : orderService.findAllByUser(userId)) {
-            formPhotos.add(convert(item));
-        }
-        return formPhotos;
+        return orderService.findAllActualOrderByUser(userId);
     }
 
     private User getLoggedInUser() {
         return userService.findLoggedInUser();
-    }
-
-    private FormPhoto convert(Item item) {
-        FormPhoto p = new FormPhoto();
-        p.setPhoto(photoService.findPhoto(item.getPhotoId()));
-        p.setCounters(orderService.findAllPhotoTypeCounterByItem(item.getId()));
-        return p;
     }
 }

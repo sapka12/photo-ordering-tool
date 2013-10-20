@@ -38,15 +38,9 @@
                                             <li class="list-group-item photo-counter">
                                                 <table class="table">
                                                     <tr>
-                                                        <td>
-                                                            <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
-                                                        </td>
                                                         <td><h4>${photoCounter.type.size}</h4></td>
                                                         <td>
                                                             <input type="text" class="form-control item-counter" photo-type="${photoCounter.type}" photo-id="${photo.photo.id}" value="${photoCounter.counter}" disabled>
-                                                        </td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
                                                         </td>
                                                     </tr>        
                                                 </table>
