@@ -14,13 +14,11 @@
             <div class="panel-body">
                 <c:forEach var="photo" varStatus="status" items="${photos}">
                     <c:if test="${status.count % 4 == 1}" ><div class="row"></c:if>
+                        <div class="col-md-3 col-sm-6 photo-panel" photo-id="${photo.photo.id}" photo-title="${photo.photo.title}">
 
-
-                            <div class="col-md-3 col-sm-6">
-
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <a class="thumbnail" data-toggle="modal" href="#myModal" style="min-height: 110px;"><img src="${pageContext.request.contextPath}/photo/<c:out value="${photo.photo.id}"/>" alt="<c:out value="${photo.photo.title}"/>" ></a>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a class="thumbnail" data-toggle="modal" href="#myModal" style="min-height: 110px;"><img src="${pageContext.request.contextPath}/photo/<c:out value="${photo.photo.id}"/>" alt="<c:out value="${photo.photo.title}"/>" ></a>
                                 </li>
 
                                 <li class="list-group-item text-center">
@@ -94,22 +92,30 @@
                     $(".modal-title").text(photoName);
                 };
 
-                var listGroups = $(".list-group");
-                listGroups.each(function() {
+                var photoPanels = $(".photo-panel");
+                photoPanels.each(function() {
+                    var photoId = $(this).attr("photo-id");
+                    var photoName = $(this).attr("photo-title");
 
                     var modalButton = $(".thumbnail:first", this);
                     modalButton.click(function() {
                         changeImage(photoId, photoName);
                     });
+                });
+
+
+                var listGroups = $(".list-group");
+                listGroups.each(function() {
+
 
                     var photoCounter = $(".photo-counter", this);
                     photoCounter.each(function() {
 
                         var itemCounter = $(".item-counter:first", this);
-                        var photoId = itemCounter.attr("photo-id");
-                        var photoType = itemCounter.attr("photo-type");
                         var minusButton = $(".glyphicon-minus:first", this).parent();
                         var plusButton = $(".glyphicon-plus:first", this).parent();
+                        var photoId = itemCounter.attr("photo-id");
+                        var photoType = itemCounter.attr("photo-type");
 
                         var showChangedCounter = function(changedCounter) {
                             itemCounter.val(changedCounter);
@@ -125,7 +131,6 @@
                             setEnableButtons(false);
                             $.post(incUrl(photoId, photoType, false), showChangedCounter);
                         });
-
                     });
                 });
             });

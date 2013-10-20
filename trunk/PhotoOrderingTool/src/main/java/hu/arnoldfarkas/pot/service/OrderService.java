@@ -31,4 +31,6 @@ public interface OrderService {
     public List<PhotoTypeCounter> findAllPhotoTypeCounterByItem(long itemId);
 
     public List<FormPhoto> findAllByGallery(String galleryId, long userId);
+
+    public List<FormPhoto> findAllActualOrderByUser(long userId);
 }
