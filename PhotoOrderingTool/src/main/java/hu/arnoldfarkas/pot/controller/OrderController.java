@@ -80,7 +80,7 @@ public class OrderController {
     private FormPhoto convert(Item item) {
         FormPhoto p = new FormPhoto();
         p.setPhoto(photoService.findPhoto(item.getPhotoId()));
-        p.setCounter(item.getQuantity());
+        p.setCounters(orderService.findAllPhotoTypeCounterByItem(item.getId()));
         return p;
     }
 }

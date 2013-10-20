@@ -7,16 +7,21 @@
         drop 
         foreign key FKA125540FD1F5F0AE;
 
+    alter table pot_phototype_counter 
+        drop 
+        foreign key FKBDD3C5BF58D84BAE;
+
     drop table if exists pot_items;
 
     drop table if exists pot_orders;
+
+    drop table if exists pot_phototype_counter;
 
     drop table if exists pot_users;
 
     create table pot_items (
         id bigint not null auto_increment,
         flickr_photo_id varchar(255) not null,
-        quantity integer,
         order_id bigint not null,
         primary key (id)
     );
@@ -25,6 +30,14 @@
         id bigint not null auto_increment,
         closingDate date,
         user_id bigint not null,
+        primary key (id)
+    );
+
+    create table pot_phototype_counter (
+        id bigint not null auto_increment,
+        counter integer not null,
+        type varchar(255),
+        item_id bigint,
         primary key (id)
     );
 
@@ -47,3 +60,9 @@
         add constraint FKA125540FD1F5F0AE 
         foreign key (user_id) 
         references pot_users (id);
+
+    alter table pot_phototype_counter 
+        add index FKBDD3C5BF58D84BAE (item_id), 
+        add constraint FKBDD3C5BF58D84BAE 
+        foreign key (item_id) 
+        references pot_items (id);

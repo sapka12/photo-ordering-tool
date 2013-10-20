@@ -1,13 +1,21 @@
 package hu.arnoldfarkas.pot.service.jpa;
 
+import hu.arnoldfarkas.pot.controller.form.FormPhoto;
 import hu.arnoldfarkas.pot.domain.Item;
 import hu.arnoldfarkas.pot.domain.Order;
+import hu.arnoldfarkas.pot.domain.Photo;
+import hu.arnoldfarkas.pot.domain.PhotoType;
+import hu.arnoldfarkas.pot.domain.PhotoTypeCounter;
 import hu.arnoldfarkas.pot.repository.ItemRepository;
 import hu.arnoldfarkas.pot.repository.OrderRepository;
+import hu.arnoldfarkas.pot.repository.PhotoTypeCounterRepository;
 import hu.arnoldfarkas.pot.repository.UserRepository;
 import hu.arnoldfarkas.pot.service.OrderService;
+import hu.arnoldfarkas.pot.service.PhotoService;
 import hu.arnoldfarkas.pot.service.jpa.specification.ItemSpecificationBuilder;
 import hu.arnoldfarkas.pot.service.jpa.specification.OrderSpecificationBuilder;
+import hu.arnoldfarkas.pot.service.jpa.specification.PhotoTypeCounterSpecificationBuilder;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +26,18 @@ import org.springframework.util.Assert;
 public class JpaOrderService implements OrderService {
 
     @Autowired
+    private PhotoService photoService;
+    @Autowired
     private OrderRepository orderRepository;
     @Autowired
     private ItemRepository itemRepository;
     @Autowired
+    private PhotoTypeCounterRepository photoTypeCounterRepository;
+    @Autowired
     private UserRepository userRepository;
     private ItemSpecificationBuilder itemSpec = new ItemSpecificationBuilder();
     private OrderSpecificationBuilder orderSpec = new OrderSpecificationBuilder();
+    private PhotoTypeCounterSpecificationBuilder typeSpecBuilder = new PhotoTypeCounterSpecificationBuilder();
 
     @Override
     public List<Item> findAllByUser(long userId) {
@@ -46,26 +59,24 @@ public class JpaOrderService implements OrderService {
     }
 
     @Override
-    public synchronized int countPhotos(long userId, String photoId) {
-        Item i = itemRepository.findOne(itemSpec.buildActiveByUserAndPhotoId(userId, photoId));
-        if (i == null) {
-            return 0;
-        }
-        return i.getQuantity();
-    }
-
-    @Override
     @Transactional
-    public synchronized int increasePhotoCount(long userId, String photoId, int incBy) {
+    public synchronized int increasePhotoCount(long userId, String photoId, PhotoType photoType, int incBy) {
+        Assert.notNull(photoId);
+        Assert.notNull(photoType);
+
         Order order = findOneByUser(userId);
         orderRepository.save(order);
 
         Item item = getOrCreateItem(order, photoId);
-        incQuantity(item, incBy);
+        itemRepository.save(item);
+        Assert.notNull(item);
+        PhotoTypeCounter typeCounter = getOrCreateTypeCounter(item, photoType);
+        incQuantity(typeCounter, incBy);
 
+        validateTypeCounter(typeCounter);
         validateItem(item);
 
-        return item.getQuantity();
+        return typeCounter.getCounter();
     }
 
     private Item getOrCreateItem(Order order, String photoId) {
@@ -76,8 +87,8 @@ public class JpaOrderService implements OrderService {
         return createItem(order, photoId);
     }
 
-    private void incQuantity(Item item, int incBy) {
-        int q = item.getQuantity();
+    private void incQuantity(PhotoTypeCounter photoTypeCounter, int incBy) {
+        int q = photoTypeCounter.getCounter();
         if (q + incBy > Integer.MAX_VALUE) {
             q = Integer.MAX_VALUE;
         } else if (q + incBy < 0) {
@@ -85,8 +96,8 @@ public class JpaOrderService implements OrderService {
         } else {
             q += incBy;
         }
-        item.setQuantity(q);
-        itemRepository.save(item);
+        photoTypeCounter.setCounter(q);
+        photoTypeCounterRepository.save(photoTypeCounter);
     }
 
     private Item findOne(Long orderId, String photoId) {
@@ -107,9 +118,92 @@ public class JpaOrderService implements OrderService {
 
     private void validateItem(Item item) {
         Assert.notNull(item);
-        if (item.getQuantity() > 0) {
+        if (!isEmpty(item)) {
             return;
         }
         itemRepository.delete(item);
+    }
+
+    private boolean isEmpty(Item item) {
+        return photoTypeCounterRepository.count(typeSpecBuilder.buildByItem(item.getId())) < 1;
+    }
+
+    private void validateTypeCounter(PhotoTypeCounter typeCounter) {
+        Assert.notNull(typeCounter);
+        if (typeCounter.getCounter() > 0) {
+            return;
+        }
+        photoTypeCounterRepository.delete(typeCounter);
+    }
+
+    @Override
+    public List<PhotoTypeCounter> findAllPhotoTypeCounterByItem(long id) {
+        return photoTypeCounterRepository.findAll(typeSpecBuilder.buildByItem(id));
+    }
+
+    private PhotoTypeCounter getOrCreateTypeCounter(Item item, PhotoType photoType) {
+        PhotoTypeCounter c = photoTypeCounterRepository.findOne(
+          typeSpecBuilder.buildByItemAndPhotoType(item.getId(), photoType));
+        if (c != null) {
+            return c;
+        }
+        return createPhotoTypeCounter(item, photoType);
+    }
+
+    private PhotoTypeCounter createPhotoTypeCounter(Item item, PhotoType photoType) {
+        PhotoTypeCounter c = new PhotoTypeCounter();
+        c.setItem(item);
+        c.setType(photoType);
+        return c;
+    }
+
+    @Override
+    public List<FormPhoto> findAllByGallery(String galleryId, long userId) {
+        final List<Item> ownedItems = findAllByUser(userId);
+        List<Photo> photos = photoService.findAll(galleryId);
+        List<FormPhoto> formPhotos = new ArrayList<FormPhoto>();
+        for (Photo photo : photos) {
+            formPhotos.add(createformPhoto(photo, ownedItems));
+        }
+        return formPhotos;
+    }
+
+    private FormPhoto createformPhoto(Photo photo, List<Item> ownedItems) {
+        FormPhoto fp = new FormPhoto();
+        fp.setPhoto(photo);
+        fp.setCounters(initCounters(photo.getId(), ownedItems));
+        return fp;
+    }
+
+    private List<PhotoTypeCounter> initCounters(String photoId, List<Item> ownedItems) {
+        List<PhotoTypeCounter> counters = new ArrayList<PhotoTypeCounter>();
+        for (Item item : ownedItems) {
+            if (item.getPhotoId().equals(photoId)) {
+                counters.addAll(findAllPhotoTypeCounterByItem(item.getId()));
+            }
+        }
+        validate(counters);
+        return counters;
+    }
+
+    private void validate(List<PhotoTypeCounter> counters) {
+        for (PhotoType type : PhotoType.values()) {
+            boolean contains = false;
+            for (PhotoTypeCounter photoTypeCounter : counters) {
+                if (photoTypeCounter.getType().equals(type)) {
+                    contains = true;
+                    break;
+                }
+            }
+            if (!contains) {
+                counters.add(createEmpty(type));
+            }
+        }
+    }
+
+    private PhotoTypeCounter createEmpty(PhotoType type) {
+        PhotoTypeCounter ptc = new PhotoTypeCounter();
+        ptc.setType(type);
+        return ptc;
     }
 }

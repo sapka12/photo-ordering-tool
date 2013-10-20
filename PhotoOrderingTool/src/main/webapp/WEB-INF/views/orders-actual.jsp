@@ -21,30 +21,41 @@
                     </div>
                     <div class="panel-body">
                         <c:forEach var="photo" varStatus="status" items="${order.photos}">
-                            <c:if test="${status.count % 6 == 1}" >
-                                <div class="row">
-                                </c:if>
-                                <div class="col-md-2 col-sm-4">
+                            <c:if test="${status.count % 4 == 1}" ><div class="row"></c:if>
 
-                                    <ul class="list-group">
-                                        <li class="list-group-item">
-                                            <a class="thumbnail" style="min-height: 110px;">
-                                                <img src="${pageContext.request.contextPath}/photo/<c:out value="${photo.photo.id}"/>" >
-                                            </a>
+                                    <div class="col-md-3 col-sm-6">
+
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <a class="thumbnail" data-toggle="modal" href="#myModal" style="min-height: 110px;"><img src="${pageContext.request.contextPath}/photo/<c:out value="${photo.photo.id}"/>" alt="<c:out value="${photo.photo.title}"/>" ></a>
                                         </li>
+
                                         <li class="list-group-item text-center">
                                             <h4><c:out value="${photo.photo.title}"/></h4>
                                         </li>
-                                        <li class="list-group-item">
-                                            <input type="text" class="form-control item-counter" photo-id="${photo.photo.id}" value="${photo.counter}" disabled>        
-                                        </li>
+
+                                        <c:forEach var="photoCounter" items="${photo.counters}">
+                                            <li class="list-group-item photo-counter">
+                                                <table class="table">
+                                                    <tr>
+                                                        <td>
+                                                            <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
+                                                        </td>
+                                                        <td><h4>${photoCounter.type.size}</h4></td>
+                                                        <td>
+                                                            <input type="text" class="form-control item-counter" photo-type="${photoCounter.type}" photo-id="${photo.photo.id}" value="${photoCounter.counter}" disabled>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
+                                                        </td>
+                                                    </tr>        
+                                                </table>
+                                            </li>
+                                        </c:forEach>
                                     </ul>
                                 </div>
-                                <c:if test="${status.count % 6 == 0}" >
-                                </div>
-                            </c:if>
-
-                        </c:forEach>
+                                <c:if test="${status.count % 4 == 0}" ></div></c:if>
+                            </c:forEach>
                     </div>
                 </div>
             </c:forEach>

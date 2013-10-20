@@ -1,5 +1,6 @@
 package hu.arnoldfarkas.pot.controller;
 
+import hu.arnoldfarkas.pot.domain.PhotoType;
 import hu.arnoldfarkas.pot.service.OrderService;
 import hu.arnoldfarkas.pot.service.PhotoService;
 import hu.arnoldfarkas.pot.service.UserService;
@@ -26,30 +27,35 @@ public class PhotoController {
     byte[] getImage(@PathVariable("id") String id) {
         return service.getImage(id, PhotoService.PhotoSize.SMALL);
     }
-    
+
     @RequestMapping(value = "/medium/{id}", method = RequestMethod.GET, produces = "image/jpg")
     public @ResponseBody
     byte[] getMediumImage(@PathVariable("id") String id) {
         return service.getImage(id, PhotoService.PhotoSize.MEDIUM);
     }
 
-    @RequestMapping(value = "/inc/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/inc/{type}/{id}", method = RequestMethod.POST)
     public @ResponseBody
-    int increasePhotoInOrder(@PathVariable("id") String id) {
-        return inc(id, true);
+    int increasePhotoInOrder(@PathVariable("id") String id, @PathVariable("type") String type) {
+        return inc(id, true, parseType(type));
     }
 
-    @RequestMapping(value = "/dec/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/dec/{type}/{id}", method = RequestMethod.POST)
     public @ResponseBody
-    int decreasePhotoInOrder(@PathVariable("id") String id) {
-        return inc(id, false);
+    int decreasePhotoInOrder(@PathVariable("id") String id, @PathVariable("type") String type) {
+        return inc(id, false, parseType(type));
     }
 
-    private int inc(String photoId, boolean increasing) {
-        return orderService.increasePhotoCount(getLoggedInUserId(), photoId, increasing ? 1 : -1);
+    private int inc(String photoId, boolean increasing, PhotoType type) {
+        int incVal = increasing ? 1 : -1;
+        return orderService.increasePhotoCount(getLoggedInUserId(), photoId, type, incVal);
     }
 
     private long getLoggedInUserId() {
         return userService.findLoggedInUser().getId();
+    }
+
+    private PhotoType parseType(String type) {
+        return PhotoType.valueOf(type);
     }
 }

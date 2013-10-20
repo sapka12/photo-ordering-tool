@@ -15,13 +15,11 @@ public class Item implements Serializable {
     @GeneratedValue
     @Column(name = "id")
     private Long id;
-    @Column(name = "flickr_photo_id", nullable = false)
-    private String photoId;
-    @Column(name = "quantity")
-    private int quantity;
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
+    @Column(name = "flickr_photo_id", nullable = false)
+    private String photoId;
 
     public Long getId() {
         return id;
@@ -39,19 +37,16 @@ public class Item implements Serializable {
         this.photoId = photoId;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public Order getOrder() {
         return order;
     }
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" + "id=" + id + ", order=" + order + ", photoId=" + photoId + '}';
     }
 }

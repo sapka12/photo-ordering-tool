@@ -4,7 +4,10 @@ import hu.arnoldfarkas.pot.controller.form.FormPhoto;
 import hu.arnoldfarkas.pot.domain.Gallery;
 import hu.arnoldfarkas.pot.domain.Item;
 import hu.arnoldfarkas.pot.domain.Photo;
+import hu.arnoldfarkas.pot.domain.PhotoType;
+import hu.arnoldfarkas.pot.domain.PhotoTypeCounter;
 import hu.arnoldfarkas.pot.domain.User;
+import hu.arnoldfarkas.pot.repository.PhotoTypeCounterRepository;
 import hu.arnoldfarkas.pot.service.OrderService;
 import hu.arnoldfarkas.pot.service.PhotoService;
 import hu.arnoldfarkas.pot.service.UserService;
@@ -30,6 +33,8 @@ public class GalleryController {
     @Autowired
     private OrderService orderService;
     @Autowired
+    private PhotoTypeCounterRepository photoTypeCounterRepository;
+    @Autowired
     private UserService userService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -51,7 +56,7 @@ public class GalleryController {
         ModelAndView mav = new ModelAndView("gallery");
         mav.addObject("username", getLoggedInUser().getUsername());
         mav.addObject("galleryName", gallery.getTitle());
-        mav.addObject("photos", findAll(gallery.getId()));
+        mav.addObject("photos", orderService.findAllByGallery(gallery.getId(), getLoggedInUser().getId()));
         LOGGER.debug("ModelAndView created");
         return mav;
     }
@@ -61,33 +66,6 @@ public class GalleryController {
     byte[] getImage(@PathVariable("id") String id) {
         String pictureId = photoService.findGallery(id).getDefaultPictureId();
         return photoService.getImage(pictureId, PhotoService.PhotoSize.SMALL_SQ);
-    }
-
-    private List<FormPhoto> findAll(String galleryId) {
-        final List<Item> ownedItems = orderService.findAllByUser(getLoggedInUser().getId());
-        List<Photo> photos = photoService.findAll(galleryId);
-        List<FormPhoto> formPhotos = new ArrayList<FormPhoto>();
-        for (Photo photo : photos) {
-            formPhotos.add(createformPhoto(photo, ownedItems));
-        }
-        return formPhotos;
-    }
-
-    private FormPhoto createformPhoto(Photo photo, List<Item> ownedItems) {
-        FormPhoto fp = new FormPhoto();
-        fp.setPhoto(photo);
-        fp.setCounter(getCounter(photo.getId(), ownedItems));
-        return fp;
-    }
-
-    private int getCounter(String photoId, List<Item> ownedItems) {
-        int counter = 0;
-        for (Item item : ownedItems) {
-            if (item.getPhotoId().equals(photoId)) {
-                counter += item.getQuantity();
-            }
-        }
-        return counter;
     }
 
     private User getLoggedInUser() {
