@@ -10,6 +10,12 @@
     <body>
         <%@include file='./common/navbar.jsp'%>
 
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <button type="button" class="btn btn-primary close-orders">Close Orders</button>
+            </div>
+        </div>
+
         <div class="well">
             <c:forEach var="order" items="${orders}">
                 <div class="panel panel-info">
@@ -54,5 +60,19 @@
                 </div>
             </c:forEach>
         </div>
+
+
+        <script>
+            $(document).ready(function() {
+                $(".close-orders").click(function() {
+                    console.log("closeing...");
+                    var url = "${pageContext.request.contextPath}/order/close";
+                    $.post(url, function() {
+                        console.log("orders closed.");
+                    });
+                });
+            });
+        </script>
+
     </body>
 </html>
