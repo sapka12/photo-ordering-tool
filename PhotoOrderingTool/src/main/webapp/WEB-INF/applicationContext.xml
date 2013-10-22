@@ -30,6 +30,7 @@
     
     <context:property-placeholder location="classpath:jdbc.properties" />
     <util:properties id="flickrProperties" location="classpath:flickr.properties" />
+    <util:properties id="ftpProperties" location="classpath:ftp.properties" />
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="${jdbc.driverClassName}"/>

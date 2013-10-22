@@ -33,4 +33,6 @@ public interface OrderService {
     public List<FormPhoto> findAllByGallery(String galleryId, long userId);
 
     public List<FormPhoto> findAllActualOrderByUser(long userId);
+
+    public void closeActualOrders();
 }

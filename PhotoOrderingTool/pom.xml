@@ -14,10 +14,23 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring>3.2.4.RELEASE</spring>
         <spring.sec>3.1.4.RELEASE</spring.sec>
+        <camel>2.12.1</camel>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
     </properties>
 
     <dependencies>
+        
+        <!--CAMEL-->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>${camel}</version>
+        </dependency>      
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-ftp</artifactId>
+            <version>${camel}</version>
+        </dependency>
         
         <!--SPRING-->
         <dependency>
