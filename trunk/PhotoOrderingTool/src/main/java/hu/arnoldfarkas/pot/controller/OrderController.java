@@ -4,7 +4,6 @@ import hu.arnoldfarkas.pot.controller.form.FormOrder;
 import hu.arnoldfarkas.pot.controller.form.FormPhoto;
 import hu.arnoldfarkas.pot.domain.User;
 import hu.arnoldfarkas.pot.service.OrderService;
-import hu.arnoldfarkas.pot.service.PhotoService;
 import hu.arnoldfarkas.pot.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +24,6 @@ public class OrderController {
     private UserService userService;
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private PhotoService photoService;
 
     @RequestMapping(value = "/allactual", method = RequestMethod.GET)
     public ModelAndView findAllOpenOrder() {
