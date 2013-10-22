@@ -1,18 +1,10 @@
 package hu.arnoldfarkas.pot.controller;
 
-import hu.arnoldfarkas.pot.controller.form.FormPhoto;
 import hu.arnoldfarkas.pot.domain.Gallery;
-import hu.arnoldfarkas.pot.domain.Item;
-import hu.arnoldfarkas.pot.domain.Photo;
-import hu.arnoldfarkas.pot.domain.PhotoType;
-import hu.arnoldfarkas.pot.domain.PhotoTypeCounter;
 import hu.arnoldfarkas.pot.domain.User;
-import hu.arnoldfarkas.pot.repository.PhotoTypeCounterRepository;
 import hu.arnoldfarkas.pot.service.OrderService;
 import hu.arnoldfarkas.pot.service.PhotoService;
 import hu.arnoldfarkas.pot.service.UserService;
-import java.util.ArrayList;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +24,6 @@ public class GalleryController {
     private PhotoService photoService;
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private PhotoTypeCounterRepository photoTypeCounterRepository;
     @Autowired
     private UserService userService;
 
