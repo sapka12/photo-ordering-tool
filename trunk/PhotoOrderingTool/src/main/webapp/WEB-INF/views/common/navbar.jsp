@@ -3,6 +3,7 @@
         <ul class="nav navbar-nav">
             <li><a href="${pageContext.request.contextPath}/gallery/">Galleries</a></li>
             <li><a href="${pageContext.request.contextPath}/order/">Order</a></li>
+            <li><a href="${pageContext.request.contextPath}/order/myclosed/">Closed Orders</a></li>
 
             <sec:authorize access="hasAnyRole('ROLE_ADMIN')">
                 <li><a href="${pageContext.request.contextPath}/order/allactual">Actual Orders</a></li>        

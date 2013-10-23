@@ -11,7 +11,11 @@ import org.springframework.data.jpa.domain.Specifications;
 public class ItemSpecificationBuilder {
 
     public Specification<Item> buildActiveByUser(final long userId) {
-        return Specifications.where(buildActive()).and(buildByUser(userId));
+        return buildActiveByUser(userId, true);
+    }
+
+    public Specification<Item> buildActiveByUser(final long userId, final boolean active) {
+        return Specifications.where(buildActive(active)).and(buildByUser(userId));
     }
 
     public Specification<Item> buildByUser(final long userId) {
@@ -36,11 +40,14 @@ public class ItemSpecificationBuilder {
         return Specifications.where(buildActiveByUser(userId)).and(buildByPhotoId(photoId));
     }
 
-    public Specification<Item> buildActive() {
+    public Specification<Item> buildActive(final boolean active) {
         return new Specification<Item>() {
             @Override
             public Predicate toPredicate(Root<Item> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                return cb.isNull(root.get("order").get("closingDate"));
+                if (active) {
+                    return cb.isNull(root.get("order").get("closingDate"));
+                }
+                return cb.isNotNull(root.get("order").get("closingDate"));
             }
         };
     }
