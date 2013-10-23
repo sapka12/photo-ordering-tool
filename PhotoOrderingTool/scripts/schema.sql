@@ -1,24 +1,4 @@
 
-    alter table pot_items 
-        drop 
-        foreign key FK89002956C5E24AA6;
-
-    alter table pot_orders 
-        drop 
-        foreign key FKA125540FD1F5F0AE;
-
-    alter table pot_phototype_counter 
-        drop 
-        foreign key FKBDD3C5BF58D84BAE;
-
-    drop table if exists pot_items;
-
-    drop table if exists pot_orders;
-
-    drop table if exists pot_phototype_counter;
-
-    drop table if exists pot_users;
-
     create table pot_items (
         id bigint not null auto_increment,
         flickr_photo_id varchar(255) not null,
@@ -28,7 +8,7 @@
 
     create table pot_orders (
         id bigint not null auto_increment,
-        closingDate date,
+        closingDate datetime,
         user_id bigint not null,
         primary key (id)
     );

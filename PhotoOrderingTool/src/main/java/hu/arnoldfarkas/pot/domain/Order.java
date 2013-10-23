@@ -16,7 +16,7 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Calendar closingDate;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
