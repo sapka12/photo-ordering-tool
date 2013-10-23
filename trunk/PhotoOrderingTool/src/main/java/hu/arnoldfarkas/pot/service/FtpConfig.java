@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class FtpConfig {
 
+    @Value("#{ftpProperties['ftp.type']}")
+    private String type;
     @Value("#{ftpProperties['ftp.host']}")
     private String host;
     @Value("#{ftpProperties['ftp.port']}")
@@ -35,5 +37,9 @@ public class FtpConfig {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getType() {
+        return type;
     }
 }

@@ -2,9 +2,13 @@ package hu.arnoldfarkas.pot.service.camel;
 
 import hu.arnoldfarkas.pot.service.FtpConfig;
 import hu.arnoldfarkas.pot.service.MovingService;
+import java.io.File;
+import java.io.FileFilter;
+import java.util.logging.Level;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -48,10 +52,31 @@ public class CamelMovingService implements MovingService, InitializingBean {
     public void stop() {
         LOGGER.debug("CamelContext stoping...");
         try {
+            while (!isFinised()) {
+                waitABit();
+            }
             context.stop();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
         LOGGER.debug("CamelContext stopped.");
+    }
+
+    private boolean isFinised() {
+        final File[] listFiles = Folder2FtpRouteBuilder.FROM_FOLDER.listFiles(new FileFilter() {
+                                     @Override
+                                     public boolean accept(File f) {
+                                         return f.isFile();
+                                     }
+                                 });
+        return listFiles == null || listFiles.length < 1;
+    }
+
+    private void waitABit() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            LOGGER.debug("waiting interrupted", ex);
+        }
     }
 }
