@@ -64,11 +64,22 @@
 
         <script>
             $(document).ready(function() {
+
+
+                var setEnableButtons = function(enable) {
+                    if (enable) {
+                        $(".close-orders").parent().removeAttr('disabled');
+                    } else {
+                        $(".close-orders").parent().attr('disabled', 'disabled');
+                    }
+                };
                 $(".close-orders").click(function() {
-                    console.log("closeing...");
+                    console.log("closing...");
+                    setEnableButtons(false);
                     var url = "${pageContext.request.contextPath}/order/close";
                     $.post(url, function() {
                         console.log("orders closed.");
+                        setEnableButtons(true);
                     });
                 });
             });

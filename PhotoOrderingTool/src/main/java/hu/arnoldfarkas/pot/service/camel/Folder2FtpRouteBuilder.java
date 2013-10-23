@@ -11,8 +11,7 @@ import org.slf4j.LoggerFactory;
 public class Folder2FtpRouteBuilder extends RouteBuilder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Folder2FtpRouteBuilder.class);
-    private static final File FROM_FOLDER = new File("temp/upload/");
-    private int counter = 0;
+    public static final File FROM_FOLDER = new File("temp/upload/");
     private FtpConfig ftpConfig;
 
     public Folder2FtpRouteBuilder(FtpConfig ftpConfig) {
@@ -21,21 +20,27 @@ public class Folder2FtpRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        LOGGER.debug("Folder2FtpRouteBuilder From: {}", FROM_FOLDER.getAbsolutePath());
+        String fileFrom = getFromFolder();
+        LOGGER.debug("Folder2FtpRouteBuilder From: {}", fileFrom);
         LOGGER.debug("Folder2FtpRouteBuilder To: {}", getToFtp());
 
-        from(FROM_FOLDER.getAbsolutePath()).process(new Processor() {
+        from(fileFrom).process(new Processor() {
             @Override
             public void process(Exchange exchng) throws Exception {
-                counter++;
-                LOGGER.debug("Folder2FtpRouteBuilder processed: " + counter);
+                File f = exchng.getIn().getBody(File.class);
+                LOGGER.debug("Folder2FtpRouteBuilder processing: " + f.getName());
             }
         }).to(getToFtp());
     }
 
+    private String getFromFolder() {
+        return "file://" + FROM_FOLDER.getAbsolutePath();
+    }
+
     private String getToFtp() {
         StringBuilder sb = new StringBuilder();
-        sb.append("sftp://");
+        sb.append(ftpConfig.getType());
+        sb.append("://");
         sb.append(ftpConfig.getUsername());
         sb.append("@");
         sb.append(ftpConfig.getHost());
