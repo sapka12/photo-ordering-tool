@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity(name = "pot_phototype_counter")
-public class PhotoTypeCounter implements Serializable {
+public class PhotoTypeCounter implements Serializable, Comparable<PhotoTypeCounter> {
 
     @Id
     @GeneratedValue
@@ -55,5 +55,10 @@ public class PhotoTypeCounter implements Serializable {
     @Override
     public String toString() {
         return "PhotoTypeCounter{" + "id=" + id + ", item=" + item + ", type=" + type + ", counter=" + counter + '}';
+    }
+
+    @Override
+    public int compareTo(PhotoTypeCounter o) {
+        return getType().getX() * getType().getY() - o.getType().getX() * o.getType().getY();
     }
 }
