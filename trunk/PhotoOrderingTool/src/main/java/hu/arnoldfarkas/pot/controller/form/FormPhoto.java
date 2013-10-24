@@ -3,6 +3,7 @@ package hu.arnoldfarkas.pot.controller.form;
 import hu.arnoldfarkas.pot.domain.Photo;
 import hu.arnoldfarkas.pot.domain.PhotoTypeCounter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FormPhoto {
@@ -23,6 +24,7 @@ public class FormPhoto {
     }
 
     public void setCounters(List<PhotoTypeCounter> counters) {
+        Collections.sort(counters);
         this.counters = counters;
     }
 
