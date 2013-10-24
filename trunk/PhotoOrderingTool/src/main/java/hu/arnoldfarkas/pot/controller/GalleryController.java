@@ -55,7 +55,7 @@ public class GalleryController {
     public @ResponseBody
     byte[] getImage(@PathVariable("id") String id) {
         String pictureId = photoService.findGallery(id).getDefaultPictureId();
-        return photoService.getImage(pictureId, PhotoService.PhotoSize.SMALL_SQ);
+        return photoService.getImage(pictureId, PhotoService.PhotoSize.MEDIUM);
     }
 
     private User getLoggedInUser() {

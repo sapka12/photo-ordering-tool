@@ -18,31 +18,33 @@
 
                             <ul class="list-group">
                                 <li class="list-group-item">
-                                    <a class="thumbnail" data-toggle="modal" href="#myModal" style="min-height: 110px;"><img src="${pageContext.request.contextPath}/photo/<c:out value="${photo.photo.id}"/>" alt="<c:out value="${photo.photo.title}"/>" ></a>
+                                    <a class="thumbnail" data-toggle="modal" href="#myModal">
+                                        <img style="min-height: 128px; max-height: 128px;" src="${pageContext.request.contextPath}/photo/<c:out value="${photo.photo.id}"/>" alt="<c:out value="${photo.photo.title}" />" >
+                                    </a>
                                 </li>
-
                                 <li class="list-group-item text-center">
-                                    <h4><c:out value="${photo.photo.title}"/></h4>
+                                    <c:out value="${photo.photo.title}"/>
                                 </li>
-
-                                <c:forEach var="photoCounter" items="${photo.counters}">
-                                    <li class="list-group-item photo-counter">
-                                        <table class="table">
-                                            <tr>
+                                <li class="list-group-item text-center">
+                                    <table class="table table-condensed">
+                                        <c:forEach var="photoCounter" items="${photo.counters}">
+                                            <tr class="photo-counter">
                                                 <td>
                                                     <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-minus"></span></button>
                                                 </td>
-                                                <td><h4>${photoCounter.type.size}</h4></td>
+                                                <td>
+                                                    <h4>${photoCounter.type.size}</h4>
+                                                </td>
                                                 <td>
                                                     <input type="text" class="form-control item-counter" photo-type="${photoCounter.type}" photo-id="${photo.photo.id}" value="${photoCounter.counter}" disabled>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span></button>
                                                 </td>
-                                            </tr>        
-                                        </table>
-                                    </li>
-                                </c:forEach>
+                                            </tr>
+                                        </c:forEach>
+                                    </table>
+                                </li>
                             </ul>
                         </div>
                         <c:if test="${status.count % 4 == 0}" ></div></c:if>
@@ -118,21 +120,25 @@
                         var photoType = itemCounter.attr("photo-type");
 
                         var showChangedCounter = function(changedCounter) {
+                            console.log("changedCounter: " + changedCounter)
                             itemCounter.val(changedCounter);
                             setEnableButtons(true);
                         };
 
                         plusButton.click(function() {
+                            console.log("+ " + photoId);
                             setEnableButtons(false);
                             $.post(incUrl(photoId, photoType, true), showChangedCounter);
                         });
 
                         minusButton.click(function() {
+                            console.log("- " + photoId);
                             setEnableButtons(false);
                             $.post(incUrl(photoId, photoType, false), showChangedCounter);
                         });
                     });
                 });
+                console.log("jQuery ready!");
             });
         </script>
 

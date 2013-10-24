@@ -19,7 +19,7 @@
                         <ul class="list-group">
                             <li class="list-group-item">
                                 <a href="${pageContext.request.contextPath}/gallery/<c:out value="${gallery.id}"/>" class="thumbnail" >
-                                    <img src="${pageContext.request.contextPath}/gallery/icon/<c:out value="${gallery.id}"/>" alt="<c:out value="${gallery.title}"/>" >
+                                    <img style="min-height: 128px; max-height: 128px;" src="${pageContext.request.contextPath}/gallery/icon/<c:out value="${gallery.id}"/>" alt="<c:out value="${gallery.title}"/>" >
                                 </a>
                             </li>
                             <li class="list-group-item text-center">
