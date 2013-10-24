@@ -25,25 +25,27 @@
 
                                         <ul class="list-group">
                                             <li class="list-group-item">
-                                                <a class="thumbnail" photo-id="${photo.photo.id}" photo-title="${photo.photo.title}" data-toggle="modal" href="#myModal" style="min-height: 110px;"><img src="${pageContext.request.contextPath}/photo/<c:out value="${photo.photo.id}"/>" alt="<c:out value="${photo.photo.title}"/>" ></a>
+                                                <a class="thumbnail" photo-id="${photo.photo.id}" photo-title="${photo.photo.title}" data-toggle="modal" href="#myModal" >
+                                                <img style="min-height: 128px; max-height: 128px;" src="${pageContext.request.contextPath}/photo/<c:out value="${photo.photo.id}"/>" alt="<c:out value="${photo.photo.title}"/>" >
+                                            </a>
                                         </li>
 
                                         <li class="list-group-item text-center">
                                             <h4><c:out value="${photo.photo.title}"/></h4>
                                         </li>
 
-                                        <c:forEach var="photoCounter" items="${photo.counters}">
-                                            <li class="list-group-item photo-counter">
-                                                <table class="table">
+                                        <li class="list-group-item photo-counter">
+                                            <table class="table table-condensed">
+                                                <c:forEach var="photoCounter" items="${photo.counters}">
                                                     <tr>
                                                         <td><h4>${photoCounter.type.size}</h4></td>
                                                         <td>
                                                             <input type="text" class="form-control item-counter" photo-type="${photoCounter.type}" photo-id="${photo.photo.id}" value="${photoCounter.counter}" disabled>
                                                         </td>
                                                     </tr>        
-                                                </table>
-                                            </li>
-                                        </c:forEach>
+                                                </c:forEach>
+                                            </table>
+                                        </li>
                                     </ul>
                                 </div>
                                 <c:if test="${status.count % 4 == 0}" ></div></c:if>
