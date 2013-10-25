@@ -61,10 +61,12 @@ public class OrderController {
         List<FormPhoto> formPhotos = new ArrayList<FormPhoto>();
         List<Item> items = orderService.findAllByUser(order.getUser().getId(), false);
         for (Item item : items) {
-            FormPhoto formPhoto = new FormPhoto();
-            formPhoto.setPhoto(getPhotoById(item.getPhotoId()));
-            formPhoto.setCounters(orderService.findAllPhotoTypeCounterByItem(item.getId()));
-            formPhotos.add(formPhoto);
+            if (item.getOrder().getId().equals(order.getId())) {
+                FormPhoto formPhoto = new FormPhoto();
+                formPhoto.setPhoto(getPhotoById(item.getPhotoId()));
+                formPhoto.setCounters(orderService.findAllPhotoTypeCounterByItem(item.getId()));
+                formPhotos.add(formPhoto);
+            }
         }
         return formPhotos;
     }
