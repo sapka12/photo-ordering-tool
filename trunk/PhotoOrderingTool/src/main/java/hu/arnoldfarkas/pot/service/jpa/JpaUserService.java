@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class JpaUserService implements UserService {
@@ -29,5 +30,18 @@ public class JpaUserService implements UserService {
     @Override
     public List<User> findAll() {
         return repository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public boolean changeAdminRole(String userId) {
+        User loggedInUser = findLoggedInUser();
+        User user = repository.findOne(Long.parseLong(userId));
+        if (loggedInUser.getId().equals(user.getId())) {
+            return user.isAdmin();
+        }
+        user.setAdmin(!user.isAdmin());
+        repository.save(user);
+        return user.isAdmin();
     }
 }

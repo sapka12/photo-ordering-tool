@@ -10,4 +10,6 @@ public interface UserService {
     User findLoggedInUser();
     
     List<User> findAll();
+
+    boolean changeAdminRole(String userId);
 }

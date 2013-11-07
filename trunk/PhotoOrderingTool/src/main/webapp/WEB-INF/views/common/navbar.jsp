@@ -8,6 +8,7 @@
 
             <sec:authorize access="hasAnyRole('ROLE_ADMIN')">
                 <li><a href="${pageContext.request.contextPath}/order/allactual"><spring:message code="navbar.allactualorders" /></a></li>
+                <li><a href="${pageContext.request.contextPath}/users"><spring:message code="navbar.users" /></a></li>
             </sec:authorize>
         </ul>
             
