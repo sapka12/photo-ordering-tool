@@ -15,7 +15,7 @@
                 <form role="form" method="post" action="j_spring_security_check">
                     <div class="form-group">
                         <label for="loginname"><spring:message code="loginpage.loginname" /></label>
-                        <input class="form-control"  id="j_username" name="j_username" type="text" >
+                        <input class="form-control"  id="j_username" name="j_username" type="email" >
                     </div>
                     <div class="form-group">
                         <label for="passwd"><spring:message code="loginpage.password" /></label>
