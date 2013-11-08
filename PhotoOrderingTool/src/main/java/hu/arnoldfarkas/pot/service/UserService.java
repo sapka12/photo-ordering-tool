@@ -14,4 +14,6 @@ public interface UserService {
     boolean changeAdminRole(long userId);
 
     void generateAndSendPassword(long userId);
+
+    public void saveNew(String email);
 }

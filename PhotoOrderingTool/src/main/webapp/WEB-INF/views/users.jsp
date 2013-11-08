@@ -13,7 +13,7 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Users</div>
+                    <div class="panel-heading"><spring:message code="userspage.users" /></div>
                     <div class="panel-body">
                         <table class="table table-striped ">
                             <c:forEach var="user" varStatus="status" items="${users}">
@@ -38,22 +38,24 @@
                     </div>
                 </div>
                 <div class="panel panel-default">
-                    <div class="panel-heading">Add new user</div>
+                    <div class="panel-heading"><spring:message code="userspage.addnewuser" /></div>
                     <div class="panel-body">
-                        <table class="table">
-                            <tr>
-                                <td>
-                                    <input type="email" class="form-control" id="newUserEmail" >
-                                </td>
-                                <td>
-                                    <div class="pull-right">
-                                        <button type="button" class="btn">
-                                            <span class="glyphicon glyphicon-plus-sign"></span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
+                        <form action="${pageContext.request.contextPath}/user/addnew/" method="GET">
+                            <table class="table">
+                                <tr>
+                                    <td>
+                                        <input type="email" name="email" class="form-control" id="newUserEmail" >
+                                    </td>
+                                    <td>
+                                        <div class="pull-right">
+                                            <button type="submit" class="btn">
+                                                <span class="glyphicon glyphicon-plus-sign"></span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
                     </div>
                 </div>
             </div>
