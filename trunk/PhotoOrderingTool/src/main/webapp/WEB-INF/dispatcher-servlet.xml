@@ -49,4 +49,5 @@
           class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="language" />
     </bean>
+
 </beans>

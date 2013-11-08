@@ -13,13 +13,15 @@
         </ul>
             
         <ul class="nav navbar-nav navbar-right">      
-            <li class="dropdown">
+  <!--
+  <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="language" /><b class="caret"></b></a>
-            <ul class="dropdown-menu">
+           <ul class="dropdown-menu">
                 <li><a href="?language=en">English</a></li>
                 <li><a href="?language=hu_HU">Magyar</a></li>
             </ul>
             </li>
+  -->
             <li><a>${username}</a></li>
             <li>
                 <a href="${pageContext.request.contextPath}/logout<c:out value="${i.id}"/>" type="button" class="btn btn-danger">

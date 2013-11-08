@@ -11,5 +11,7 @@ public interface UserService {
     
     List<User> findAll();
 
-    boolean changeAdminRole(String userId);
+    boolean changeAdminRole(long userId);
+
+    void generateAndSendPassword(long userId);
 }

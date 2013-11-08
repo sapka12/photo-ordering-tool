@@ -28,7 +28,7 @@ public class JpaUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         LOGGER.debug("loadUserByUsername({})", username);
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByEmail(username);
         if (user == null) {
             LOGGER.warn("user found: {}", user);
             throw new UsernameNotFoundException(username);
@@ -43,7 +43,7 @@ public class JpaUserDetailsService implements UserDetailsService {
         if (user.isAdmin()) {
             authorities.add(new SimpleGrantedAuthority(ROLE_ADMIN));
         }
-        LOGGER.debug("{} auth: {}", user.getUsername(), authorities);
+        LOGGER.debug("{} auth: {}", user.getEmail(), authorities);
         return authorities;
     }
 }
