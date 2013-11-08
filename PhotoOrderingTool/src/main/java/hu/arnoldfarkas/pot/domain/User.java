@@ -16,16 +16,12 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
     @Column(name = "name", unique = true, nullable = false)
-    private String username;
+    private String email;
     @Column(name = "admin_role")
     private boolean admin = false;
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public Long getId() {
@@ -48,12 +44,16 @@ public class User implements Serializable {
         return password;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", username=" + username + ", admin=" + admin + '}';
+        return "User{" + "id=" + id + ", username=" + email + ", admin=" + admin + '}';
     }
 }

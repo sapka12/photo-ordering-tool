@@ -18,21 +18,21 @@
                         <table class="table table-striped ">
                             <c:forEach var="user" varStatus="status" items="${users}">
                                 <tr>
-                                    <td>${user.username}</td>
+                                    <td>${user.email}</td>
                                     <td>
                                         <div class="btn-group pull-right">
-                                            <button class="btn changeadminrole" user-id="${user.id}" type="button" class="btn">
+                                            <button class="btn changeadminrole" user-id="${user.id}" type="button" >
                                                 <span class="glyphicon 
                                                       <c:if test="${user.admin}">glyphicon-plus</c:if>
                                                       <c:if test="${!user.admin}">glyphicon-minus</c:if>
                                                           "></span>
                                                 </button>
-                                                <button type="button" class="btn">
-                                                    <span class="glyphicon glyphicon-send"></span>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                                <button class="btn resendpassword" user-id="${user.id}" type="button" >
+                                                <span class="glyphicon glyphicon-send"></span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
                             </c:forEach>
                         </table>
                     </div>
@@ -62,18 +62,33 @@
         <script>
             $(document).ready(function() {
 
-                //href="${pageContext.request.contextPath}/user/resendpassword/${user.id}" 
+                var getResendPasswordPath = function(userId) {
+                    return "${pageContext.request.contextPath}/user/resendpassword/" + userId;
+                };
+
+                var resendPwButtons = $(".resendpassword");
+                resendPwButtons.each(function() {
+                    var button = $(this);
+                    var userId = button.attr("user-id");
+
+                    button.click(function() {
+                        button.prop('disabled', true);
+                        $.post(getResendPasswordPath(userId), function() {
+                            button.prop('disabled', false);
+                        });
+                    });
+                });
+
                 var getChangeAdminPath = function(userId) {
                     return "${pageContext.request.contextPath}/user/changeadminrole/" + userId;
                 };
 
                 var changeAdminRoleButtons = $(".changeadminrole");
-
                 changeAdminRoleButtons.each(function() {
                     var changeButton = $(this);
                     var userId = changeButton.attr("user-id");
 
-                    $(this).click(function() {
+                    changeButton.click(function() {
                         $.post(getChangeAdminPath(userId), function(isAdmin) {
                             var span = $("span:first", changeButton);
                             span.removeClass("glyphicon-minus");

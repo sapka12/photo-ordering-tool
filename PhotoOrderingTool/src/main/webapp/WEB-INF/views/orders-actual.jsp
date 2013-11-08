@@ -23,7 +23,7 @@
                     <div class="panel-heading">
                         <a>
                             <span class="badge pull-right">${order.sum}</span>
-                            ${order.user.username}
+                            ${order.user.email}
                         </a>
                     </div>
                     <div class="panel-body">

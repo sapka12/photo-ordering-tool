@@ -41,7 +41,7 @@ public class OrderController {
     public ModelAndView findAllClosedOrdersByUser() {
         User u = getLoggedInUser();
         ModelAndView mav = new ModelAndView("closed-orders-by-user");
-        mav.addObject("username", u.getUsername());
+        mav.addObject("username", u.getEmail());
         mav.addObject("orders", findAllClosedOrders(u));
         return mav;
     }
@@ -74,7 +74,7 @@ public class OrderController {
     @RequestMapping(value = "/allactual", method = RequestMethod.GET)
     public ModelAndView findAllOpenOrder() {
         ModelAndView mav = new ModelAndView("orders-actual");
-        mav.addObject("username", getLoggedInUser().getUsername());
+        mav.addObject("username", getLoggedInUser().getEmail());
         mav.addObject("orders", findAllOpenOrders());
         return mav;
     }
@@ -109,7 +109,7 @@ public class OrderController {
     public ModelAndView findOrderList() {
         ModelAndView mav = new ModelAndView("gallery");
         User user = getLoggedInUser();
-        mav.addObject("username", user.getUsername());
+        mav.addObject("username", user.getEmail());
         mav.addObject("galleryName", "Order");
         mav.addObject("photos", findAll(user.getId()));
         return mav;

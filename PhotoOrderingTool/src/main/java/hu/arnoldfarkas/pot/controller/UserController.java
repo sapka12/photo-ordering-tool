@@ -18,7 +18,7 @@ public class UserController {
 
     @Autowired
     private UserService service;
-    
+
     @RequestMapping(value = {"/login", "/"}, method = RequestMethod.GET)
     public ModelAndView loginPage() {
         LOGGER.debug("loginPage");
@@ -30,19 +30,26 @@ public class UserController {
         LOGGER.debug("login");
         return "redirect:/gallery";
     }
-    
+
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public ModelAndView listUsers() {
         LOGGER.debug("users");
         ModelAndView mav = new ModelAndView("users");
+        mav.addObject("username", service.findLoggedInUser().getEmail());
         mav.addObject("users", service.findAll());
         return mav;
     }
-    
+
     @RequestMapping(value = "/user/changeadminrole/{userId}", method = RequestMethod.POST)
-    public @ResponseBody boolean changeAdminRoleOfUser(@PathVariable("userId") String userId) {
-        return service.changeAdminRole(userId);
+    public @ResponseBody
+    boolean changeAdminRoleOfUser(@PathVariable("userId") String userId) {
+        return service.changeAdminRole(Long.parseLong(userId));
     }
-    
-    
+
+    @RequestMapping(value = "/user/resendpassword/{userId}", method = RequestMethod.POST)
+    public @ResponseBody
+    void resendPassword(@PathVariable("userId") String userId) {
+        service.generateAndSendPassword(Long.parseLong(userId));
+    }
+
 }

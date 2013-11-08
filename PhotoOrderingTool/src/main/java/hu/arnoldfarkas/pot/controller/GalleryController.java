@@ -31,7 +31,7 @@ public class GalleryController {
     public ModelAndView list() {
         LOGGER.debug("GalleryListController.list");
         ModelAndView mav = new ModelAndView("gallerylist");
-        mav.addObject("username", getLoggedInUser().getUsername());
+        mav.addObject("username", getLoggedInUser().getEmail());
         mav.addObject("list", photoService.findAll());
         return mav;
     }
@@ -44,7 +44,7 @@ public class GalleryController {
         LOGGER.debug("get gallery info");
 
         ModelAndView mav = new ModelAndView("gallery");
-        mav.addObject("username", getLoggedInUser().getUsername());
+        mav.addObject("username", getLoggedInUser().getEmail());
         mav.addObject("galleryName", gallery.getTitle());
         mav.addObject("photos", orderService.findAllByGallery(gallery.getId(), getLoggedInUser().getId()));
         LOGGER.debug("ModelAndView created");

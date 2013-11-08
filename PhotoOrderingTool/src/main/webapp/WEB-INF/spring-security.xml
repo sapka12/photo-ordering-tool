@@ -26,8 +26,10 @@
         <intercept-url pattern="/user" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/order/all" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/order/allactual" access="hasRole('ROLE_ADMIN')"/>
-		
+        <intercept-url pattern="/users" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/user/changeadminrole/*" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/user/resendpassword/*" access="hasRole('ROLE_ADMIN')"/>
+        
         <form-login 
             login-page="/login" 
             authentication-failure-url="/login?/failure"
