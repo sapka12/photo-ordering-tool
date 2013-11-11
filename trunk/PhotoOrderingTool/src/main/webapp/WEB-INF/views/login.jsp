@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -12,6 +13,12 @@
         <div class="container">
             <div class="well">
                 <h1><spring:message code="loginpage.login" /></h1>
+                
+                <c:if test="${param.failure != null}" >
+                    <!--LOGIN ERROR MESSAGE-->
+                    <div class="alert alert-danger"><spring:message code="loginpage.loginerror" /></div>
+                </c:if>
+                    
                 <form role="form" method="post" action="j_spring_security_check">
                     <div class="form-group">
                         <label for="loginname"><spring:message code="loginpage.loginname" /></label>

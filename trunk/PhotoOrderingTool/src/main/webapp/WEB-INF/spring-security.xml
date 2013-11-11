@@ -32,7 +32,7 @@
         
         <form-login 
             login-page="/login" 
-            authentication-failure-url="/login?/failure"
+            authentication-failure-url="/login?failure"
             default-target-url="/gallery/"
             always-use-default-target="true"            
         />
