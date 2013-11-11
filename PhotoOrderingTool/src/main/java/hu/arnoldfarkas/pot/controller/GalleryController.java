@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class GalleryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GalleryController.class);
+    private static final int PAGE_SIZE = 96;
     @Autowired
     private PhotoService photoService;
     @Autowired
@@ -36,18 +37,19 @@ public class GalleryController {
         return mav;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ModelAndView findGalleryById(@PathVariable("id") String id) {
-        LOGGER.debug("findGalleryById({})", id);
-
-        Gallery gallery = photoService.findGallery(id);
-        LOGGER.debug("get gallery info");
+    @RequestMapping(value = "/{id}/page/{page}", method = RequestMethod.GET)
+    public ModelAndView findGalleryByIdAndPage(@PathVariable("id") String galleryId, @PathVariable("page") int pageNumber) {
+        Gallery gallery = photoService.findGallery(galleryId);
 
         ModelAndView mav = new ModelAndView("gallery");
+
         mav.addObject("username", getLoggedInUser().getEmail());
+        mav.addObject("photos", orderService.findAllByGallery(gallery.getId(), PAGE_SIZE, pageNumber, getLoggedInUser().getId()));
+        mav.addObject("actualpage", pageNumber);
+        mav.addObject("pages", countPages(galleryId));
+        mav.addObject("galleryId", gallery.getId());
         mav.addObject("galleryName", gallery.getTitle());
-        mav.addObject("photos", orderService.findAllByGallery(gallery.getId(), getLoggedInUser().getId()));
-        LOGGER.debug("ModelAndView created");
+
         return mav;
     }
 
@@ -61,4 +63,9 @@ public class GalleryController {
     private User getLoggedInUser() {
         return userService.findLoggedInUser();
     }
+
+    private int countPages(String galleryId) {
+        return new Double(Math.ceil(new Double(1) * photoService.countPhotosInGallery(galleryId) / PAGE_SIZE)).intValue();
+    }
+
 }

@@ -11,6 +11,26 @@
         <%@include file='./common/navbar.jsp'%>
 
         <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-6"><h3><span class="label label-default">${galleryName}</span></h3></div>
+                    <div class="col-md-6">
+                        <c:if test="${pages > 1}" >
+                            <div class="pull-right ">
+                                <ul class="pagination">
+                                    <c:forEach begin="1" var="page" end="${pages}">
+                                        <li
+                                            <c:if test="${page == actualpage}" > class="active"</c:if>
+                                                >
+                                                <a href="${pageContext.request.contextPath}/gallery/${galleryId}/page/${page}">${page}</a>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                            </div>
+                        </c:if>
+                    </div>    
+                </div>
+            </div>
             <div class="panel-body">
                 <c:forEach var="photo" varStatus="status" items="${photos}">
                     <c:if test="${status.count % 4 == 1}" ><div class="row"></c:if>
@@ -49,6 +69,26 @@
                         </div>
                         <c:if test="${status.count % 4 == 0}" ></div></c:if>
                     </c:forEach>
+            </div>
+            <div class="panel-footer">
+                <div class="row">
+                    <div class="col-md-6"><h3><span class="label label-default">${galleryName}</span></h3></div>
+                    <div class="col-md-6">
+                        <c:if test="${pages > 1}" >
+                            <div class="pull-right ">
+                                <ul class="pagination">
+                                    <c:forEach begin="1" var="page" end="${pages}">
+                                        <li
+                                            <c:if test="${page == actualpage}" > class="active"</c:if>
+                                                >
+                                                <a href="${pageContext.request.contextPath}/gallery/${galleryId}/page/${page}">${page}</a>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                            </div>
+                        </c:if>
+                    </div>    
+                </div>
             </div>
         </div>
 

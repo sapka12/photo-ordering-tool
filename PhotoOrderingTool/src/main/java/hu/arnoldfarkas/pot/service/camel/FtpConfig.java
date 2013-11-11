@@ -1,4 +1,4 @@
-package hu.arnoldfarkas.pot.service;
+package hu.arnoldfarkas.pot.service.camel;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

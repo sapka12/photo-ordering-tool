@@ -110,7 +110,7 @@ public class OrderController {
         ModelAndView mav = new ModelAndView("gallery");
         User user = getLoggedInUser();
         mav.addObject("username", user.getEmail());
-        mav.addObject("galleryName", "Order");
+        mav.addObject("galleryName", "");
         mav.addObject("photos", findAll(user.getId()));
         return mav;
     }

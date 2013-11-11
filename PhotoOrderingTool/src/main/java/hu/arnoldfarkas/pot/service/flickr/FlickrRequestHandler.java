@@ -85,19 +85,21 @@ public class FlickrRequestHandler implements FlickrApi, InitializingBean {
     }
 
     @Override
-    public List<Photo> findAllByPhotoset(String photosetId) {
+    public List<Photo> findAllByPhotoset(String photosetId, int pageSize, int page) {
         getAuth();
         int tryCounter = 0;
+        FlickrException flickrException = null;
         while (tryCounter < REQUEST_REPEAT_COUNTER) {
             tryCounter++;
             try {
-                PhotoList list = photosetsInterface.getPhotos(photosetId, Integer.MAX_VALUE, 0);
+                PhotoList list = photosetsInterface.getPhotos(photosetId, pageSize, page);
                 return list.subList(0, list.size());
             } catch (FlickrException ex) {
                 LOGGER.trace("{}th try.", tryCounter);
+                flickrException = ex;
             }
         }
-        throw new RuntimeException();
+        throw new RuntimeException(flickrException);
     }
 
     @Override
@@ -142,5 +144,21 @@ public class FlickrRequestHandler implements FlickrApi, InitializingBean {
             }
         }
         throw new RuntimeException();
+    }
+
+    @Override
+    public int countPhotosInPhotoset(String galleryId) {
+        int tryCounter = 0;
+        FlickrException flickrException = null;
+        while (tryCounter < REQUEST_REPEAT_COUNTER) {
+            tryCounter++;
+            try {
+                return photosetsInterface.getInfo(galleryId).getPhotoCount();
+            } catch (FlickrException ex) {
+                LOGGER.trace("{}th try.", tryCounter);
+                flickrException = ex;
+            }
+        }
+        throw new RuntimeException(flickrException);
     }
 }

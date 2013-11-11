@@ -9,8 +9,10 @@ import java.util.List;
 public interface FlickrApi {
 
     Photosets getPhotosets();
-    List<Photo> findAllByPhotoset(String photosetId);
+    List<Photo> findAllByPhotoset(String photosetId, int pageSize, int page);
     Photoset findOnePhotoset(String id);
     Photo findOnePhoto(String id);
     InputStream getImage(String id, int size);
+
+    public int countPhotosInPhotoset(String galleryId);
 }

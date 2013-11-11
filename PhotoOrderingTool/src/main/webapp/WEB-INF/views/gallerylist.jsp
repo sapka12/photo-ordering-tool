@@ -18,7 +18,7 @@
                     <div class="col-md-3 col-sm-6">
                         <ul class="list-group">
                             <li class="list-group-item">
-                                <a href="${pageContext.request.contextPath}/gallery/<c:out value="${gallery.id}"/>" class="thumbnail" >
+                                <a href="${pageContext.request.contextPath}/gallery/<c:out value="${gallery.id}"/>/page/1" class="thumbnail" >
                                     <img style="min-height: 128px; max-height: 128px;" src="${pageContext.request.contextPath}/gallery/icon/<c:out value="${gallery.id}"/>" alt="<c:out value="${gallery.title}"/>" >
                                 </a>
                             </li>

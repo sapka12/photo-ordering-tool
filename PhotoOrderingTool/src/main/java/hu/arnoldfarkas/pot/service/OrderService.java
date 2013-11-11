@@ -25,11 +25,12 @@ public interface OrderService {
 
     public List<PhotoTypeCounter> findAllPhotoTypeCounterByItem(long itemId);
 
-    public List<FormPhoto> findAllByGallery(String galleryId, long userId);
+    public List<FormPhoto> findAllByGallery(String galleryId, int pageSize, int pageNumber, long userId);
 
     public List<FormPhoto> findAllActualOrderByUser(long userId);
 
     public List<Order> findAllClosedOrderByUser(long userId);
-    
+
     public void closeActualOrders();
+
 }

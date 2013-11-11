@@ -1,6 +1,5 @@
 package hu.arnoldfarkas.pot.service.camel;
 
-import hu.arnoldfarkas.pot.service.FtpConfig;
 import hu.arnoldfarkas.pot.service.MovingService;
 import java.io.File;
 import java.io.FileFilter;

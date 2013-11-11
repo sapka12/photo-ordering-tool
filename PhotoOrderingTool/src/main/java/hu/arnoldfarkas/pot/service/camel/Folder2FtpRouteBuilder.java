@@ -1,6 +1,5 @@
 package hu.arnoldfarkas.pot.service.camel;
 
-import hu.arnoldfarkas.pot.service.FtpConfig;
 import java.io.File;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
