@@ -20,6 +20,12 @@
 
     <dependencies>
         
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+        </dependency>
+
         <!-- Java Mail API -->
         <dependency>
             <groupId>javax.mail</groupId>

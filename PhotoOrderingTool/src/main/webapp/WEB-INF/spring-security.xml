@@ -54,6 +54,7 @@
  
     <beans:bean id="defaultUser" class="hu.arnoldfarkas.pot.domain.User" >
         <beans:property name="email" value="farkasarnold1981@gmail.com" />
+        <beans:property name="password" value="password" />
     </beans:bean>
         
 </beans:beans>

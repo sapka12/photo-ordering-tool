@@ -20,7 +20,6 @@ public class JpaUserService implements UserService, InitializingBean {
 
     @Autowired
     private PasswordEncoder encoder;
-    
 
     @Autowired
     private UserRepository repository;
@@ -91,6 +90,7 @@ public class JpaUserService implements UserService, InitializingBean {
     @Transactional
     public void saveNew(String email) {
         saveNew(email, false);
+        generateAndSendPassword(findByEmail(email).getId());
     }
 
     public void saveNew(String email, boolean admin) {
@@ -104,7 +104,6 @@ public class JpaUserService implements UserService, InitializingBean {
         u.setEmail(email);
         u.setAdmin(admin);
         repository.save(u);
-        generateAndSendPassword(u.getId());
     }
 
     private boolean alreadyExists(String email) {
@@ -118,5 +117,7 @@ public class JpaUserService implements UserService, InitializingBean {
             return;
         }
         saveNew(defaultUser.getEmail(), true);
+        User u = findByEmail(defaultUser.getEmail());
+        changePassword(u.getId(), defaultUser.getPassword());
     }
 }
