@@ -23,8 +23,6 @@
         <intercept-url pattern="/denied" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/gallery/*" access="hasRole('ROLE_USER')"/>
-        <intercept-url pattern="/user" access="hasRole('ROLE_USER')"/>
-        <intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/order/all" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/users" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/user/changeadminrole/*" access="hasRole('ROLE_ADMIN')"/>
@@ -37,6 +35,8 @@
             always-use-default-target="true"            
         />
 		
+        
+        
         <access-denied-handler error-page="/denied"/>
 		
         <logout invalidate-session="true" 
@@ -46,8 +46,14 @@
 	
     <authentication-manager>
         <authentication-provider user-service-ref="jpaUserDetailsService">
-            <!--<password-encoder hash="md5"/>-->
+            <password-encoder ref="encoder" />
         </authentication-provider>
     </authentication-manager>
  
+    <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+ 
+    <beans:bean id="defaultUser" class="hu.arnoldfarkas.pot.domain.User" >
+        <beans:property name="email" value="farkasarnold1981@gmail.com" />
+    </beans:bean>
+        
 </beans:beans>

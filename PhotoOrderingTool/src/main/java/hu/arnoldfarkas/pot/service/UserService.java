@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface UserService {
 
-    User findByName(String username);
+    User findByEmail(String username);
 
     User findLoggedInUser();
     
