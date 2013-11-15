@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class GalleryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GalleryController.class);
-    private static final int PAGE_SIZE = 96;
+    private static final int PAGE_SIZE = 48;
     @Autowired
     private PhotoService photoService;
     @Autowired
