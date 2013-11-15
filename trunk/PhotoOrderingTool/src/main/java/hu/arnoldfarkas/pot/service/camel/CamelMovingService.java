@@ -22,10 +22,12 @@ public class CamelMovingService implements MovingService, InitializingBean {
     private CamelContext context;
     @Autowired
     private FtpConfig ftpConfig;
+    @Autowired
+    private DropboxConfig dropboxConfig;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        routeBuilder = new Folder2FtpRouteBuilder(ftpConfig);
+        routeBuilder = new MovingFromFolderRouteBuilder(ftpConfig, dropboxConfig);
         context = new DefaultCamelContext();
         try {
             LOGGER.debug("Adding route...");
@@ -62,7 +64,7 @@ public class CamelMovingService implements MovingService, InitializingBean {
     }
 
     private boolean isFinised() {
-        final File[] listFiles = Folder2FtpRouteBuilder.FROM_FOLDER.listFiles(new FileFilter() {
+        final File[] listFiles = MovingFromFolderRouteBuilder.FROM_FOLDER.listFiles(new FileFilter() {
                                      @Override
                                      public boolean accept(File f) {
                                          return f.isFile();

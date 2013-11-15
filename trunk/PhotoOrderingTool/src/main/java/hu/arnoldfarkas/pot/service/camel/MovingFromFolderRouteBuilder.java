@@ -7,14 +7,16 @@ import org.apache.camel.builder.RouteBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Folder2FtpRouteBuilder extends RouteBuilder {
+public class MovingFromFolderRouteBuilder extends RouteBuilder {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Folder2FtpRouteBuilder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MovingFromFolderRouteBuilder.class);
     public static final File FROM_FOLDER = new File("temp/upload/");
-    private FtpConfig ftpConfig;
+    private final FtpConfig ftpConfig;
+    private final DropboxConfig dropboxConfig;
 
-    public Folder2FtpRouteBuilder(FtpConfig ftpConfig) {
+    public MovingFromFolderRouteBuilder(FtpConfig ftpConfig, DropboxConfig dropboxConfig) {
         this.ftpConfig = ftpConfig;
+        this.dropboxConfig = dropboxConfig;
     }
 
     @Override
@@ -29,7 +31,9 @@ public class Folder2FtpRouteBuilder extends RouteBuilder {
                 File f = exchng.getIn().getBody(File.class);
                 LOGGER.debug("Folder2FtpRouteBuilder processing: " + f.getName());
             }
-        }).to(getToFtp());
+        })
+          .to(getToFtp())
+          .to(getToDropbox());
     }
 
     private String getFromFolder() {
@@ -50,4 +54,17 @@ public class Folder2FtpRouteBuilder extends RouteBuilder {
         sb.append(ftpConfig.getPassword());
         return sb.toString();
     }
+
+    private String getToDropbox() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("dropbox");
+        sb.append("://");
+        sb.append("?");
+        sb.append("userId=");
+        sb.append(dropboxConfig.getUserId());
+        sb.append("&accessToken=");
+        sb.append(dropboxConfig.getAccessToken());
+        return sb.toString();
+    }
+
 }
