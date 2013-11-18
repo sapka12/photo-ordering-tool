@@ -30,8 +30,7 @@
     
     <context:property-placeholder location="classpath:jdbc.properties" />
     <util:properties id="flickrProperties" location="classpath:flickr.properties" />
-    <util:properties id="ftpProperties" location="classpath:ftp.properties" />
-    <util:properties id="dropboxProperties" location="classpath:dropbox.properties" />
+    <util:properties id="camel" location="classpath:camel.properties" />
     <util:properties id="smtp" location="classpath:smtp.properties" />
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">

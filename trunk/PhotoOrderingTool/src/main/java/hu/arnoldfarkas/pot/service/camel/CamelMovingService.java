@@ -3,11 +3,9 @@ package hu.arnoldfarkas.pot.service.camel;
 import hu.arnoldfarkas.pot.service.MovingService;
 import java.io.File;
 import java.io.FileFilter;
-import java.util.logging.Level;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -18,17 +16,13 @@ import org.springframework.stereotype.Service;
 public class CamelMovingService implements MovingService, InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CamelMovingService.class);
+    
+    @Autowired
     private RouteBuilder routeBuilder;
-    private CamelContext context;
-    @Autowired
-    private FtpConfig ftpConfig;
-    @Autowired
-    private DropboxConfig dropboxConfig;
+    private final CamelContext context = new DefaultCamelContext();
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        routeBuilder = new MovingFromFolderRouteBuilder(ftpConfig, dropboxConfig);
-        context = new DefaultCamelContext();
         try {
             LOGGER.debug("Adding route...");
             context.addRoutes(routeBuilder);
@@ -65,11 +59,11 @@ public class CamelMovingService implements MovingService, InitializingBean {
 
     private boolean isFinised() {
         final File[] listFiles = MovingFromFolderRouteBuilder.FROM_FOLDER.listFiles(new FileFilter() {
-                                     @Override
-                                     public boolean accept(File f) {
-                                         return f.isFile();
-                                     }
-                                 });
+            @Override
+            public boolean accept(File f) {
+                return f.isFile();
+            }
+        });
         return listFiles == null || listFiles.length < 1;
     }
 
