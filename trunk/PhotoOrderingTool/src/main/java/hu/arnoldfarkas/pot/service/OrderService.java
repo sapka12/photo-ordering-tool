@@ -33,4 +33,8 @@ public interface OrderService {
 
     public void closeActualOrders();
 
+    public Order findOneByUser(long userId);
+    public List<Item> findOneByOrder(long orderId);
+    public List<PhotoTypeCounter> findOneByItem(long itemId);
+    
 }

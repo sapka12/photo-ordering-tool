@@ -10,15 +10,15 @@ import org.springframework.data.jpa.domain.Specifications;
 
 public class OrderSpecificationBuilder {
 
-    public Specification<Order> buildActiveByUser(final long userId, final boolean active) {
-        return Specifications.where(buildActive(active)).and(buildByUser(userId));
+    public Specification<Order> activeByUser(final long userId, final boolean active) {
+        return Specifications.where(active(active)).and(byUser(userId));
     }
 
-    public Specification<Order> buildActiveByUser(final long userId) {
-        return buildActiveByUser(userId, true);
+    public Specification<Order> activeByUser(final long userId) {
+        return activeByUser(userId, true);
     }
 
-    public Specification<Order> buildByUser(final long userId) {
+    public Specification<Order> byUser(final long userId) {
         return new Specification<Order>() {
             @Override
             public Predicate toPredicate(Root<Order> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -27,11 +27,11 @@ public class OrderSpecificationBuilder {
         };
     }
 
-    public Specification<Order> buildActive() {
-        return buildActive(true);
+    public Specification<Order> active() {
+        return active(true);
     }
 
-    public Specification<Order> buildActive(final boolean active) {
+    public Specification<Order> active(final boolean active) {
         return new Specification<Order>() {
             @Override
             public Predicate toPredicate(Root<Order> root, CriteriaQuery<?> query, CriteriaBuilder cb) {

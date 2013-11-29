@@ -11,16 +11,16 @@ import org.springframework.data.jpa.domain.Specifications;
 
 public class PhotoTypeCounterSpecificationBuilder {
 
-    public Specification<PhotoTypeCounter> buildByItem(final long userId) {
+    public Specification<PhotoTypeCounter> byItem(final long itemId) {
         return new Specification<PhotoTypeCounter>() {
             @Override
             public Predicate toPredicate(Root<PhotoTypeCounter> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                return cb.equal(root.get("item").get("id").as(Long.class), new Long(userId));
+                return cb.equal(root.get("item").get("id").as(Long.class), new Long(itemId));
             }
         };
     }
 
-    public Specification<PhotoTypeCounter> buildByPhotoType(final PhotoType photoType) {
+    public Specification<PhotoTypeCounter> byPhotoType(final PhotoType photoType) {
         return new Specification<PhotoTypeCounter>() {
             @Override
             public Predicate toPredicate(Root<PhotoTypeCounter> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -29,11 +29,11 @@ public class PhotoTypeCounterSpecificationBuilder {
         };
     }
 
-    public Specification<PhotoTypeCounter> buildByItemAndPhotoType(final long itemId, final PhotoType photoType) {
-        return Specifications.where(buildByItem(itemId)).and(buildByPhotoType(photoType));
+    public Specification<PhotoTypeCounter> byItemAndPhotoType(final long itemId, final PhotoType photoType) {
+        return Specifications.where(byItem(itemId)).and(byPhotoType(photoType));
     }
 
-    public Specification<PhotoTypeCounter> buildByOrder(final long userId) {
+    public Specification<PhotoTypeCounter> byOrder(final long userId) {
         return new Specification<PhotoTypeCounter>() {
             @Override
             public Predicate toPredicate(Root<PhotoTypeCounter> root, CriteriaQuery<?> query, CriteriaBuilder cb) {

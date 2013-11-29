@@ -10,15 +10,24 @@ import org.springframework.data.jpa.domain.Specifications;
 
 public class ItemSpecificationBuilder {
 
-    public Specification<Item> buildActiveByUser(final long userId) {
-        return buildActiveByUser(userId, true);
+    public Specification<Item> byOrder(final long orderId) {
+        return new Specification<Item>() {
+            @Override
+            public Predicate toPredicate(Root<Item> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                return cb.equal(root.get("order").get("id").as(Long.class), new Long(orderId));
+            }
+        };
     }
 
-    public Specification<Item> buildActiveByUser(final long userId, final boolean active) {
-        return Specifications.where(buildActive(active)).and(buildByUser(userId));
+    public Specification<Item> activeByUser(final long userId) {
+        return activeByUser(userId, true);
     }
 
-    public Specification<Item> buildByUser(final long userId) {
+    public Specification<Item> activeByUser(final long userId, final boolean active) {
+        return Specifications.where(active(active)).and(byUser(userId));
+    }
+
+    public Specification<Item> byUser(final long userId) {
         return new Specification<Item>() {
             @Override
             public Predicate toPredicate(Root<Item> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -27,7 +36,7 @@ public class ItemSpecificationBuilder {
         };
     }
 
-    public Specification<Item> buildByPhotoId(final String photoId) {
+    public Specification<Item> byPhotoId(final String photoId) {
         return new Specification<Item>() {
             @Override
             public Predicate toPredicate(Root<Item> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -36,11 +45,11 @@ public class ItemSpecificationBuilder {
         };
     }
 
-    public Specification<Item> buildActiveByUserAndPhotoId(final long userId, final String photoId) {
-        return Specifications.where(buildActiveByUser(userId)).and(buildByPhotoId(photoId));
+    public Specification<Item> activeByUserAndPhotoId(final long userId, final String photoId) {
+        return Specifications.where(activeByUser(userId)).and(byPhotoId(photoId));
     }
 
-    public Specification<Item> buildActive(final boolean active) {
+    public Specification<Item> active(final boolean active) {
         return new Specification<Item>() {
             @Override
             public Predicate toPredicate(Root<Item> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
