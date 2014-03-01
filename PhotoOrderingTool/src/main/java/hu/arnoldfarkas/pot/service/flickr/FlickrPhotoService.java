@@ -34,7 +34,6 @@ public class FlickrPhotoService implements PhotoService {
     public List<Gallery> findAll() {
         LOGGER.debug("FindAll");
         Photosets photosets = flickrApi.getPhotosets();
-        
         List<Gallery> list = new ArrayList<Gallery>();
         for (Photoset photoset : photosets.getPhotosets()) {
             list.add(convert(photoset));
