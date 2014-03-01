@@ -3,6 +3,7 @@ package hu.arnoldfarkas.pot.service.flickr;
 import com.flickr4java.flickr.Flickr;
 import com.flickr4java.flickr.FlickrException;
 import com.flickr4java.flickr.REST;
+import com.flickr4java.flickr.RequestContext;
 import com.flickr4java.flickr.Transport;
 import com.flickr4java.flickr.auth.Auth;
 import com.flickr4java.flickr.auth.AuthInterface;
@@ -38,6 +39,7 @@ public class FlickrRequestHandler implements FlickrApi, InitializingBean {
     private PhotosetsInterface photosetsInterface;
     private PhotosInterface photosInterface;
     private AuthInterface authInterface;
+    private RequestContext requestContext;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -46,28 +48,34 @@ public class FlickrRequestHandler implements FlickrApi, InitializingBean {
         photosetsInterface = flickrApi.getPhotosetsInterface();
         photosInterface = flickrApi.getPhotosInterface();
         authInterface = flickrApi.getAuthInterface();
+        initAuth();
     }
 
-    private Auth getAuth() {
+    private Auth initAuth() {
         int tryCounter = 0;
+        FlickrException e = null;
         while (tryCounter < REQUEST_REPEAT_COUNTER) {
             tryCounter++;
             try {
-                return authInterface.checkToken(requestToken);
+                requestContext = RequestContext.getRequestContext();
+                Auth auth = authInterface.checkToken(requestToken);
+                requestContext.setAuth(auth);
+                return auth;
             } catch (FlickrException ex) {
+                e = ex;
                 LOGGER.debug("{}th try.", tryCounter, ex);
             }
         }
-        throw new RuntimeException();
+        throw new RuntimeException("auth init error", e);
     }
 
     private String getUserId() {
-        return getAuth().getUser().getId();
+        return initAuth().getUser().getId();
     }
 
     @Override
     public Photosets getPhotosets() {
-        getAuth();
+        initAuth();
         return getPhotosetsWithException();
     }
 
@@ -86,14 +94,14 @@ public class FlickrRequestHandler implements FlickrApi, InitializingBean {
 
     @Override
     public List<Photo> findAllByPhotoset(String photosetId, int pageSize, int page) {
-        getAuth();
+        initAuth();
         int tryCounter = 0;
         FlickrException flickrException = null;
         while (tryCounter < REQUEST_REPEAT_COUNTER) {
             tryCounter++;
             try {
-                PhotoList list = photosetsInterface.getPhotos(photosetId, pageSize, page);
-                return list.subList(0, list.size());
+                PhotoList photoList = photosetsInterface.getPhotos(photosetId, pageSize, page);
+                return photoList.subList(0, photoList.size());
             } catch (FlickrException ex) {
                 LOGGER.trace("{}th try.", tryCounter);
                 flickrException = ex;
@@ -113,26 +121,28 @@ public class FlickrRequestHandler implements FlickrApi, InitializingBean {
                 LOGGER.trace("{}th try.", tryCounter);
             }
         }
-        throw new RuntimeException();
+        throw new RuntimeException("Could not find photoset: " + id);
     }
 
     @Override
     public Photo findOnePhoto(String id) {
         int tryCounter = 0;
+        FlickrException flickrException = null;
         while (tryCounter < REQUEST_REPEAT_COUNTER) {
             tryCounter++;
             try {
                 return photosInterface.getPhoto(id);
             } catch (FlickrException ex) {
+                flickrException = ex;
                 LOGGER.trace("{}th try.", tryCounter);
             }
         }
-        throw new RuntimeException();
+        throw new RuntimeException("Photo not found: " + id, flickrException);
     }
 
     @Override
     public InputStream getImage(String id, int size) {
-        getAuth();
+        initAuth();
         Photo photo = findOnePhoto(id);
         int tryCounter = 0;
         while (tryCounter < REQUEST_REPEAT_COUNTER) {
