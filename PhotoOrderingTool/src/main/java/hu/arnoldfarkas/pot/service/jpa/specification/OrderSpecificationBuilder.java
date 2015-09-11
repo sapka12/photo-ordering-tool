@@ -1,6 +1,6 @@
 package hu.arnoldfarkas.pot.service.jpa.specification;
 
-import hu.arnoldfarkas.pot.domain.Order;
+import hu.arnoldfarkas.pot.domain.model.Order;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;

@@ -1,25 +1,14 @@
-package hu.arnoldfarkas.pot.domain;
+package hu.arnoldfarkas.pot.domain.model;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
 import javax.persistence.Transient;
 
-@Entity(name = "pot_orders")
 public class Order implements Serializable {
 
-    @Id
-    @GeneratedValue
     private Long id;
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Calendar closingDate;
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public User getUser() {
@@ -30,6 +19,7 @@ public class Order implements Serializable {
         this.user = user;
     }
 
+    @Id
     public Long getId() {
         return id;
     }

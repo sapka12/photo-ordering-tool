@@ -1,6 +1,6 @@
 package hu.arnoldfarkas.pot.repository;
 
-import hu.arnoldfarkas.pot.domain.Order;
+import hu.arnoldfarkas.pot.domain.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

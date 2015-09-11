@@ -1,7 +1,7 @@
 package hu.arnoldfarkas.pot.service.jpa.specification;
 
-import hu.arnoldfarkas.pot.domain.PhotoType;
-import hu.arnoldfarkas.pot.domain.PhotoTypeCounter;
+import hu.arnoldfarkas.pot.domain.model.PhotoType;
+import hu.arnoldfarkas.pot.domain.model.PhotoTypeCounter;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;

@@ -1,6 +1,6 @@
 package hu.arnoldfarkas.pot.service.impl;
 
-import hu.arnoldfarkas.pot.domain.User;
+import hu.arnoldfarkas.pot.domain.model.User;
 import hu.arnoldfarkas.pot.service.EmailService;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;

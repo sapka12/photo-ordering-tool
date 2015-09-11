@@ -1,7 +1,7 @@
 package hu.arnoldfarkas.pot.controller.form;
 
-import hu.arnoldfarkas.pot.domain.Photo;
-import hu.arnoldfarkas.pot.domain.PhotoTypeCounter;
+import hu.arnoldfarkas.pot.domain.model.Photo;
+import hu.arnoldfarkas.pot.domain.model.PhotoTypeCounter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

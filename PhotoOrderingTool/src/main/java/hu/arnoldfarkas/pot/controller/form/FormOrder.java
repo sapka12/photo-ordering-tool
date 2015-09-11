@@ -1,7 +1,7 @@
 package hu.arnoldfarkas.pot.controller.form;
 
-import hu.arnoldfarkas.pot.domain.PhotoTypeCounter;
-import hu.arnoldfarkas.pot.domain.User;
+import hu.arnoldfarkas.pot.domain.model.PhotoTypeCounter;
+import hu.arnoldfarkas.pot.domain.model.User;
 import java.util.List;
 
 public class FormOrder {

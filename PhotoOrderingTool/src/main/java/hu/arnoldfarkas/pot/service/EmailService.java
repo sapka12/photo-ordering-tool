@@ -1,6 +1,6 @@
 package hu.arnoldfarkas.pot.service;
 
-import hu.arnoldfarkas.pot.domain.User;
+import hu.arnoldfarkas.pot.domain.model.User;
 
 public interface EmailService {
 

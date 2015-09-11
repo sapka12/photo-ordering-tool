@@ -1,24 +1,13 @@
-package hu.arnoldfarkas.pot.domain;
+package hu.arnoldfarkas.pot.domain.model;
 
 import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity(name = "pot_items")
+@Document
 public class Item implements Serializable {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
-    @Column(name = "flickr_photo_id", nullable = false)
     private String photoId;
 
     public Long getId() {

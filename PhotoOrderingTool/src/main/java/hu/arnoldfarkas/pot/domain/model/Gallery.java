@@ -1,4 +1,4 @@
-package hu.arnoldfarkas.pot.domain;
+package hu.arnoldfarkas.pot.domain.model;
 
 public class Gallery {
 

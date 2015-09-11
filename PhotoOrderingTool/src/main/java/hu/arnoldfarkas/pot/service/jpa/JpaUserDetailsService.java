@@ -1,6 +1,6 @@
 package hu.arnoldfarkas.pot.service.jpa;
 
-import hu.arnoldfarkas.pot.domain.User;
+import hu.arnoldfarkas.pot.domain.model.User;
 import hu.arnoldfarkas.pot.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Collection;

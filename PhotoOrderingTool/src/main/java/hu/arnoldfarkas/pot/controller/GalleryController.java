@@ -1,7 +1,7 @@
 package hu.arnoldfarkas.pot.controller;
 
-import hu.arnoldfarkas.pot.domain.Gallery;
-import hu.arnoldfarkas.pot.domain.User;
+import hu.arnoldfarkas.pot.domain.model.Gallery;
+import hu.arnoldfarkas.pot.domain.model.User;
 import hu.arnoldfarkas.pot.service.OrderService;
 import hu.arnoldfarkas.pot.service.PhotoService;
 import hu.arnoldfarkas.pot.service.UserService;

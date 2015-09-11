@@ -1,10 +1,10 @@
 package hu.arnoldfarkas.pot.service;
 
 import hu.arnoldfarkas.pot.controller.form.FormPhoto;
-import hu.arnoldfarkas.pot.domain.Item;
-import hu.arnoldfarkas.pot.domain.Order;
-import hu.arnoldfarkas.pot.domain.PhotoType;
-import hu.arnoldfarkas.pot.domain.PhotoTypeCounter;
+import hu.arnoldfarkas.pot.domain.model.Item;
+import hu.arnoldfarkas.pot.domain.model.Order;
+import hu.arnoldfarkas.pot.domain.model.PhotoType;
+import hu.arnoldfarkas.pot.domain.model.PhotoTypeCounter;
 import java.util.List;
 
 public interface OrderService {

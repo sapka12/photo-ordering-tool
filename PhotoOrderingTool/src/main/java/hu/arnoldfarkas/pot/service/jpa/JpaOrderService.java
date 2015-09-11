@@ -1,12 +1,12 @@
 package hu.arnoldfarkas.pot.service.jpa;
 
 import hu.arnoldfarkas.pot.controller.form.FormPhoto;
-import hu.arnoldfarkas.pot.domain.Item;
-import hu.arnoldfarkas.pot.domain.Order;
-import hu.arnoldfarkas.pot.domain.Photo;
-import hu.arnoldfarkas.pot.domain.PhotoType;
-import hu.arnoldfarkas.pot.domain.PhotoTypeCounter;
-import hu.arnoldfarkas.pot.domain.User;
+import hu.arnoldfarkas.pot.domain.model.Item;
+import hu.arnoldfarkas.pot.domain.model.Order;
+import hu.arnoldfarkas.pot.domain.model.Photo;
+import hu.arnoldfarkas.pot.domain.model.PhotoType;
+import hu.arnoldfarkas.pot.domain.model.PhotoTypeCounter;
+import hu.arnoldfarkas.pot.domain.model.User;
 import hu.arnoldfarkas.pot.repository.ItemRepository;
 import hu.arnoldfarkas.pot.repository.OrderRepository;
 import hu.arnoldfarkas.pot.repository.PhotoTypeCounterRepository;

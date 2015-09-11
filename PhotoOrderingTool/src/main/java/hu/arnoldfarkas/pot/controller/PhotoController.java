@@ -1,6 +1,6 @@
 package hu.arnoldfarkas.pot.controller;
 
-import hu.arnoldfarkas.pot.domain.PhotoType;
+import hu.arnoldfarkas.pot.domain.model.PhotoType;
 import hu.arnoldfarkas.pot.service.OrderService;
 import hu.arnoldfarkas.pot.service.PhotoService;
 import hu.arnoldfarkas.pot.service.UserService;

@@ -1,4 +1,4 @@
-package hu.arnoldfarkas.pot.domain;
+package hu.arnoldfarkas.pot.domain.model;
 
 import java.io.Serializable;
 import javax.persistence.Column;

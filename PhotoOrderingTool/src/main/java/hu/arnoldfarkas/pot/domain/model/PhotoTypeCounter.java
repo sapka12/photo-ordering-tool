@@ -1,22 +1,11 @@
-package hu.arnoldfarkas.pot.domain;
+package hu.arnoldfarkas.pot.domain.model;
 
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
-@Entity(name = "pot_phototype_counter")
 public class PhotoTypeCounter implements Serializable, Comparable<PhotoTypeCounter> {
 
-    @Id
-    @GeneratedValue
     private Long id;
-    @ManyToOne
     private Item item;
-    @Enumerated(EnumType.STRING)
     private PhotoType type;
     private int counter;
 

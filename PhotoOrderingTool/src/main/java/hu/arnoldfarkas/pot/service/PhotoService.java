@@ -1,7 +1,7 @@
 package hu.arnoldfarkas.pot.service;
 
-import hu.arnoldfarkas.pot.domain.Gallery;
-import hu.arnoldfarkas.pot.domain.Photo;
+import hu.arnoldfarkas.pot.domain.model.Gallery;
+import hu.arnoldfarkas.pot.domain.model.Photo;
 import java.util.List;
 
 public interface PhotoService {
