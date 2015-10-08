@@ -24,10 +24,11 @@ import org.springframework.util.Assert;
 public class FlickrPhotoService implements PhotoService {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(FlickrPhotoService.class);
-    @Autowired
-    private FlickrApi flickrApi;
+    private final FlickrApi flickrApi;
     
-    public FlickrPhotoService() {
+    @Autowired
+    public FlickrPhotoService(FlickrApi flickrApi) {
+        this.flickrApi = flickrApi;
     }
     
     @Override

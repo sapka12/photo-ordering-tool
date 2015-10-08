@@ -106,16 +106,15 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.12</version>
         </dependency>            
-        
         <dependency>
             <groupId>com.flickr4java</groupId>
-            <artifactId>flickr</artifactId>
-            <version>2.5</version>
+            <artifactId>flickr4java</artifactId>
+            <version>2.13</version>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.26</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.189</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
